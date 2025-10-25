@@ -17,7 +17,7 @@
 |--------------------------------------|--------|
 | ALI ALAA ALSADADI                    | Task 1 |
 | ROSHAIL TANVIR FAKHARUDDIN MOHAMED   | Task 2 |
-| MOHAMAD MULHAM AHMAD WAIS            | Task 3 |
-| ABDULAZIZ MOHAMMED HASAN ALABED      | Task 4 |
-| FADHEL ABBAS JAAFAR KADHEM           | Task 5 |
+| ABDULAZIZ MOHAMMED HASAN ALABED      | Task 3 |
+| FADHEL ABBAS JAAFAR KADHEM           | Task 4 |
+| MOHAMAD MULHAM AHMAD WAIS            | Task 5 |
 ## A link to your live, hosted application on Replit.

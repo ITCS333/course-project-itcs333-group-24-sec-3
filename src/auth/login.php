@@ -7,6 +7,34 @@
   You are encouraged to use a CSS framework for styling, as hinted in the comments,
   but you can also use your own stylesheet.
 -->
+<?php
+require_once __DIR__ . '/../common/auth.php';
+
+ensureSessionStarted();
+
+$error = null;
+
+if (isUserLoggedIn()) {
+    $target = $_SESSION['user']['role'] === 'admin' ? '/src/admin/manage_users.php' : '/index.php';
+    header("Location: $target");
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+
+    if ($email === '' || $password === '') {
+        $error = 'Please provide both email and password.';
+    } elseif (!attemptLogin($email, $password)) {
+        $error = 'Invalid email or password.';
+    } else {
+        $target = $_SESSION['user']['role'] === 'admin' ? '/src/admin/manage_users.php' : '/index.php';
+        header("Location: $target");
+        exit;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,59 +57,64 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </head>
-<body class="d-flex justify-content-center" <!-- TODO: Add any styling to the 'body' tag to center the login form on the page. -->>
+<body class="d-flex justify-content-center align-items-center min-vh-100"><!-- TODO: Add any styling to the 'body' tag to center the login form on the page. -->
 
     <!-- This will be the main content area of the page. -->
     <!-- TODO: Use the 'main' element to contain the login form, as it represents the primary content of the document. -->
-    <main>
+    <main class="w-100" style="max-width: 420px;">
         <!-- This 'section' groups the related content of the login form. -->
         <!-- TODO: Create a 'section' element to act as the login card. -->
-        <section>
+        <section class="card shadow p-4">
             <!-- The heading of the login form -->
             <!-- TODO: Add a heading element (e.g., 'h1' or 'h2') for the form's title. The text should be "Welcome Back!". -->
-            <h2>Welcome Back!</h2>
+            <h2 class="text-center mb-3">Welcome Back!</h2>
+
+            <?php if ($error): ?>
+                <div class="alert alert-danger" role="alert"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></div>
+            <?php endif; ?>
 
             <!-- The form element will wrap all the inputs. -->
             <!-- TODO: Create a 'form' element. The 'action' can be '#' for now. -->
-            <form action="#" method="post">
+            <form action="#" method="post" novalidate>
                 <!-- TODO: Use a 'fieldset' to group all the related controls for the login form. -->
-                <fieldset>
+                <fieldset class="border-0 p-0">
                     <!-- TODO: Add a 'legend' to caption the fieldset. e.g., "Secure Login". This improves accessibility. -->
-                    <legend>Secure Login</legend>
+                    <legend class="visually-hidden">Secure Login</legend>
                     <!-- TODO: Add a 'label' for the email input field.
                          The 'for' attribute should be "email".
                          The text should be "Email Address". -->
-                    <label for="email">Email Address</label>
+                    <label class="form-label" for="email">Email Address</label>
 
                     <!-- TODO: Add an 'input' field for the email.
                          - The type should be "email".
                          - The id must be "email".
                          - It should be a required field. -->
-                    <input type="email" id="email" required />
+                    <input type="email" name="email" id="email" class="form-control mb-3" required value="<?= htmlspecialchars($_POST['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>" />
 
                     <!-- TODO: Add a 'label' for the password input field.
                          The 'for' attribute should be "password".
                          The text should be "Password". -->
-                    <label for="password">Password</label>
+                    <label class="form-label" for="password">Password</label>
 
                     <!-- TODO: Add an 'input' field for the password.
                          - The type should be "password".
                          - The id must be "password".
                          - It should be a required field.
                          - For validation, add a 'minlength' attribute (e.g., minlength="8"). -->
-                    <input type="password" id="password" required minlength="8">
+                    <input type="password" name="password" id="password" class="form-control mb-4" required minlength="8">
 
                     <!-- This is the form submission button. -->
                     <!-- TODO: Add a 'button' to submit the form, inside the fieldset.
                          - The type should be "submit".
                          - The id must be "login".
                          - The text should be "Log In". -->
-                    <button type="submit" id="login">Log In</button>
+                    <button type="submit" id="login" class="btn btn-primary w-100">Log In</button>
                 </fieldset>
                 <!-- End of the fieldset. -->
 
 
             <!-- End of the form element. -->
+            </form>
 
         </section>
         <!-- End of the login section. -->

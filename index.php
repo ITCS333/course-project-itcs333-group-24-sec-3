@@ -5,6 +5,12 @@
   This page will serve as the main entry point to the course website.
   It should contain a simple navigation menu with links to all the key pages.
 -->
+<?php
+require_once __DIR__ . '/src/common/auth.php';
+
+ensureSessionStarted();
+$currentUser = $_SESSION['user'] ?? null;
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,7 +18,6 @@
     <meta charset="UTF-8" />
     <!-- TODO: Add the responsive 'viewport' meta tag. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <!-- TODO: Add a title, e.g., "Web Dev Course Homepage". -->
     <title>Wed Dev Course Homepage</title>
     <!-- TODO: Link to your CSS framework or stylesheet. -->
@@ -24,26 +29,36 @@
   </head>
   <body>
     <!-- TODO: Create a 'header' with a main heading ('h1') like "Welcome to the Web Development Course". -->
-    <header>
-      <h1>Welcome to the Web Development Course</h1>
+    <header class="container py-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <h1>Welcome to the Web Development Course</h1>
+        <?php if ($currentUser): ?>
+          <div class="text-end">
+            <p class="mb-1">Signed in as <?= htmlspecialchars($currentUser['name'], ENT_QUOTES, 'UTF-8') ?> (<?= htmlspecialchars($currentUser['role'], ENT_QUOTES, 'UTF-8') ?>)</p>
+            <a class="btn btn-outline-secondary btn-sm" href="/src/auth/logout.php">Logout</a>
+          </div>
+        <?php else: ?>
+          <a class="btn btn-primary" href="/src/auth/login.php">Login</a>
+        <?php endif; ?>
+      </div>
     </header>
     <!-- TODO: Create the 'main' content area. -->
-    <main>
+    <main class="container pb-5">
       <!-- TODO: Create a 'nav' element to hold the site navigation. -->
-      <nav>
+      <nav class="card p-4 shadow-sm">
         <!-- TODO: Add a sub-heading ('h2') "Site Navigation". -->
-        <h2>Site Navigation</h2>
+        <h2 class="h4">Site Navigation</h2>
         <!-- TODO: Create an unordered list ('ul') to hold the links. -->
-        <ul>
+        <ul class="list-unstyled">
           <!-- Section: General -->
           <!-- TODO: Add a list item ('li') with a link ('a') to the Login page.
                      - Text: "Login" -->
-          <li><a href="src/auth/login.html">Login</a></li>
+          <li class="mb-2"><a href="/src/auth/login.php">Login</a></li>
           <!-- Section: Admin Pages -->
           <!-- TODO: Add a list item ('li') with a link ('a') to the Admin Portal.
                      - Text: "Admin Portal (Manage Students)" -->
           <li>
-            <a href="src/admin/manage_users.html"
+            <a href="/src/admin/manage_users.php"
               >Admin Portal (Manage Students)</a
             >
           </li>

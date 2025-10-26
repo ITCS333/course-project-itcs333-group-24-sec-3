@@ -2,7 +2,7 @@
 $host = 'localhost';
 $dbname = 'crudusers';
 $user = 'root';
-$pass = '^hQ5)xB4';
+$pass = 'password123';
 
 try {
     $dsn = "mysql:host=$host;charset=utf8mb4";

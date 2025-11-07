@@ -7,59 +7,120 @@
 -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <!-- TODO: Add the 'meta' tag for character encoding (UTF-8). -->
-    
+    <meta charset="UTF-8" />
+
     <!-- TODO: Add the responsive 'viewport' meta tag. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- TODO: Add a title, e.g., "Web Dev Course Homepage". -->
+    <title>Web Dev Course Homepage</title>
 
     <!-- TODO: Link to your CSS framework or stylesheet. -->
-</head>
-<body>
-
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <!-- TODO: Create a 'header' with a main heading ('h1') like "Welcome to the Web Development Course". -->
+    <header class="bg-primary text-white py-5 mb-4">
+      <div class="container">
+        <h1 class="text-center">Welcome to the Web Development Course</h1>
+      </div>
+    </header>
 
     <!-- TODO: Create the 'main' content area. -->
+    <main class="container">
+      <!-- TODO: Create a 'nav' element to hold the site navigation. -->
+      <nav class="card p-4">
+        <!-- TODO: Add a sub-heading ('h2') "Site Navigation". -->
+        <h2 class="mb-4">Site Navigation</h2>
 
-        <!-- TODO: Create a 'nav' element to hold the site navigation. -->
-            <!-- TODO: Add a sub-heading ('h2') "Site Navigation". -->
-
-            <!-- TODO: Create an unordered list ('ul') to hold the links. -->
-
-                <!-- Section: General -->
-                <!-- TODO: Add a list item ('li') with a link ('a') to the Login page.
+        <!-- TODO: Create an unordered list ('ul') to hold the links. -->
+        <ul class="list-group">
+          <!-- Section: General -->
+          <!-- TODO: Add a list item ('li') with a link ('a') to the Login page.
                      - Text: "Login" -->
+          <li class="list-group-item">
+            <a href="src/auth/login.html" class="text-decoration-none">Login</a>
+          </li>
 
-                <!-- Section: Admin Pages -->
-                <!-- TODO: Add a list item ('li') with a link ('a') to the Admin Portal.
+          <!-- Section: Admin Pages -->
+          <!-- TODO: Add a list item ('li') with a link ('a') to the Admin Portal.
                      - Text: "Admin Portal (Manage Students)" -->
-                
-                <!-- TODO: Add a list item ('li') with a link ('a') to the Admin Resources page.
+          <li class="list-group-item">
+            <a href="src/admin/manage_users.html" class="text-decoration-none"
+              >Admin Portal (Manage Students)</a
+            >
+          </li>
+
+          <!-- TODO: Add a list item ('li') with a link ('a') to the Admin Resources page.
                      - Text: "Admin: Manage Resources" -->
+          <li class="list-group-item">
+            <a href="src/resources/admin.html" class="text-decoration-none"
+              >Admin: Manage Resources</a
+            >
+          </li>
 
-                <!-- TODO: Add a list item ('li') with a link ('a') to the Admin Weekly Breakdown page.
+          <!-- TODO: Add a list item ('li') with a link ('a') to the Admin Weekly Breakdown page.
                      - Text: "Admin: Manage Weekly Breakdown" -->
+          <li class="list-group-item">
+            <a href="src/weekly/admin.html" class="text-decoration-none"
+              >Admin: Manage Weekly Breakdown</a
+            >
+          </li>
 
-                <!-- TODO: Add a list item ('li') with a link ('a') to the Admin Assignments page.
+          <!-- TODO: Add a list item ('li') with a link ('a') to the Admin Assignments page.
                      - Text: "Admin: Manage Assignments" -->
+          <li class="list-group-item">
+            <a href="src/assignments/admin.html" class="text-decoration-none"
+              >Admin: Manage Assignments</a
+            >
+          </li>
 
-                <!-- Section: Student Pages -->
-                <!-- TODO: Add a list item ('li') with a link ('a') to the Student Resources page.
+          <!-- Section: Student Pages -->
+          <!-- TODO: Add a list item ('li') with a link ('a') to the Student Resources page.
                      - Text: "View Course Resources" -->
+          <li class="list-group-item">
+            <a href="src/resources/list.html" class="text-decoration-none"
+              >View Course Resources</a
+            >
+          </li>
 
-                <!-- TODO: Add a list item ('li') with a link ('a') to the Student Weekly Breakdown page.
+          <!-- TODO: Add a list item ('li') with a link ('a') to the Student Weekly Breakdown page.
                      - Text: "View Weekly Breakdown" -->
+          <li class="list-group-item">
+            <a href="src/weekly/list.html" class="text-decoration-none"
+              >View Weekly Breakdown</a
+            >
+          </li>
 
-                <!-- TODO: Add a list item ('li') with a link ('a') to the Student Assignments page.
+          <!-- TODO: Add a list item ('li') with a link ('a') to the Student Assignments page.
                      - Text: "View Assignments" -->
-              
-                <!-- TODO: Add a list item ('li') with a link ('a') to the Discussion Board.
+          <li class="list-group-item">
+            <a href="src/assignments/list.html" class="text-decoration-none"
+              >View Assignments</a
+            >
+          </li>
+
+          <!-- TODO: Add a list item ('li') with a link ('a') to the Discussion Board.
                      - Text: "General Discussion Board" -->
+          <li class="list-group-item">
+            <a href="src/discussion/baord.html" class="text-decoration-none"
+              >General Discussion Board</a
+            >
+          </li>
 
-            <!-- End of the unordered list. -->
+          <!-- End of the unordered list. -->
+        </ul>
         <!-- End of the 'nav' element. -->
+      </nav>
 
-    <!-- End of 'main'. -->
-</body>
+      <!-- End of 'main'. -->
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>

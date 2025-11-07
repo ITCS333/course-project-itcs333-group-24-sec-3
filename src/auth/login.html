@@ -9,80 +9,107 @@
 -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <!-- TODO: Add the 'meta' tag to specify the character encoding for the document to be UTF-8. -->
-
+    <meta charset="UTF-8" />
 
     <!-- TODO: Add the 'meta' tag that makes the page responsive.
          The 'name' should be 'viewport' and the 'content' should set the 'width' to 'device-width'
          and the 'initial-scale' to '1.0'. -->
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- TODO: Add a 'title' for the page. It should be "Login". -->
-
+    <title>Login</title>
 
     <!-- TODO: Link to a CSS file or a CSS framework like PicoCSS or Bootstrap to style the page. You can use a CDN link. -->
-
-
-</head>
-<body <!-- TODO: Add any styling to the 'body' tag to center the login form on the page. -->>
-
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <!-- TODO: Add any styling to the 'body' tag to center the login form on the page. -->
+  <body class="d-flex align-items-center min-vh-100 bg-light">
     <!-- This will be the main content area of the page. -->
     <!-- TODO: Use the 'main' element to contain the login form, as it represents the primary content of the document. -->
-
-        <!-- This 'section' groups the related content of the login form. -->
-        <!-- TODO: Create a 'section' element to act as the login card. -->
-
+    <main class="container">
+      <!-- This 'section' groups the related content of the login form. -->
+      <!-- TODO: Create a 'section' element to act as the login card. -->
+      <section class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+          <div class="card shadow-sm p-4">
             <!-- The heading of the login form -->
             <!-- TODO: Add a heading element (e.g., 'h1' or 'h2') for the form's title. The text should be "Welcome Back!". -->
-
+            <h1 class="text-center mb-4">Welcome Back!</h1>
 
             <!-- The form element will wrap all the inputs. -->
             <!-- TODO: Create a 'form' element. The 'action' can be '#' for now. -->
+            <form action="#">
+              <!-- TODO: Use a 'fieldset' to group all the related controls for the login form. -->
+              <fieldset>
+                <!-- TODO: Add a 'legend' to caption the fieldset. e.g., "Secure Login". This improves accessibility. -->
+                <legend class="h5 mb-3">Secure Login</legend>
 
-                <!-- TODO: Use a 'fieldset' to group all the related controls for the login form. -->
-                
-                    <!-- TODO: Add a 'legend' to caption the fieldset. e.g., "Secure Login". This improves accessibility. -->
+                <!-- TODO: Add a 'label' for the email input field.
+                                 The 'for' attribute should be "email".
+                                 The text should be "Email Address". -->
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email Address</label>
 
-                    <!-- TODO: Add a 'label' for the email input field.
-                         The 'for' attribute should be "email".
-                         The text should be "Email Address". -->
+                  <!-- TODO: Add an 'input' field for the email.
+                                     - The type should be "email".
+                                     - The id must be "email".
+                                     - It should be a required field. -->
+                  <input
+                    type="email"
+                    id="email"
+                    class="form-control"
+                    required
+                  />
+                </div>
 
+                <!-- TODO: Add a 'label' for the password input field.
+                                 The 'for' attribute should be "password".
+                                 The text should be "Password". -->
+                <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
 
-                    <!-- TODO: Add an 'input' field for the email.
-                         - The type should be "email".
-                         - The id must be "email".
-                         - It should be a required field. -->
+                  <!-- TODO: Add an 'input' field for the password.
+                                     - The type should be "password".
+                                     - The id must be "password".
+                                     - It should be a required field.
+                                     - For validation, add a 'minlength' attribute (e.g., minlength="8"). -->
+                  <input
+                    type="password"
+                    id="password"
+                    class="form-control"
+                    minlength="8"
+                    required
+                  />
+                </div>
 
+                <!-- This is the form submission button. -->
+                <!-- TODO: Add a 'button' to submit the form, inside the fieldset.
+                                 - The type should be "submit".
+                                 - The id must be "login".
+                                 - The text should be "Log In". -->
+                <button type="submit" id="login" class="btn btn-primary w-100">
+                  Log In
+                </button>
 
-                    <!-- TODO: Add a 'label' for the password input field.
-                         The 'for' attribute should be "password".
-                         The text should be "Password". -->
-
-
-                    <!-- TODO: Add an 'input' field for the password.
-                         - The type should be "password".
-                         - The id must be "password".
-                         - It should be a required field.
-                         - For validation, add a 'minlength' attribute (e.g., minlength="8"). -->
-                
-
-                    <!-- This is the form submission button. -->
-                    <!-- TODO: Add a 'button' to submit the form, inside the fieldset.
-                         - The type should be "submit".
-                         - The id must be "login".
-                         - The text should be "Log In". -->
-                
                 <!-- End of the fieldset. -->
+              </fieldset>
 
-
-            <!-- End of the form element. -->
-
+              <!-- End of the form element. -->
+            </form>
+          </div>
+        </div>
 
         <!-- End of the login section. -->
+      </section>
 
-    <!-- End of the main content area. -->
+      <!-- End of the main content area. -->
+    </main>
 
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>
-

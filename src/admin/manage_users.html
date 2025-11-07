@@ -8,137 +8,281 @@
 -->
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <!-- TODO: Add the 'meta' tag for character encoding (UTF-8). -->
+    <meta charset="UTF-8" />
 
     <!-- TODO: Add the responsive 'viewport' meta tag. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- TODO: Add a 'title' for the page, e.g., "Admin Portal". -->
+    <title>Admin Portal</title>
 
     <!-- TODO: Link to a CSS file or a CSS framework. -->
-
-</head>
-<body>
-
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <!-- TODO: Create a 'header' element for the top of the page. -->
+    <header class="bg-primary text-white py-4 mb-4">
+      <div class="container">
         <!-- TODO: Inside the header, add a main heading (e.g., 'h1') with the text "Admin Portal". -->
+        <h1 class="text-center">Admin Portal</h1>
+      </div>
+    </header>
     <!-- End of the header. -->
 
     <!-- TODO: Create a 'main' element to hold the primary content of the portal. -->
+    <main class="container">
+      <!-- Section 1: Password Management -->
+      <!-- TODO: Create a 'section' for the password management functionality. -->
+      <section class="mb-5">
+        <!-- TODO: Add a sub-heading (e.g., 'h2') with the text "Change Your Password". -->
+        <h2 class="mb-3">Change Your Password</h2>
 
-        <!-- Section 1: Password Management -->
-        <!-- TODO: Create a 'section' for the password management functionality. -->
-            <!-- TODO: Add a sub-heading (e.g., 'h2') with the text "Change Your Password". -->
+        <!-- TODO: Create a 'form' for changing the password. The 'action' can be '#'. -->
+        <form action="#" class="card p-4">
+          <!-- TODO: Use a 'fieldset' to group the password-related fields. -->
+          <fieldset>
+            <!-- TODO: Add a 'legend' for the fieldset, e.g., "Password Update". -->
+            <legend class="h5">Password Update</legend>
 
-            <!-- TODO: Create a 'form' for changing the password. The 'action' can be '#'. -->
-                <!-- TODO: Use a 'fieldset' to group the password-related fields. -->
-                    <!-- TODO: Add a 'legend' for the fieldset, e.g., "Password Update". -->
+            <!-- TODO: Add a 'label' for the current password input. 'for' should be "current-password". -->
+            <div class="mb-3">
+              <label for="current-password" class="form-label"
+                >Current Password</label
+              >
+              <!-- TODO: Add an 'input' for the current password.
+                             - type="password"
+                             - id="current-password"
+                             - required -->
+              <input
+                type="password"
+                id="current-password"
+                class="form-control"
+                required
+              />
+            </div>
 
-                    <!-- TODO: Add a 'label' for the current password input. 'for' should be "current-password". -->
-                    <!-- TODO: Add an 'input' for the current password.
-                         - type="password"
-                         - id="current-password"
-                         - required -->
+            <!-- TODO: Add a 'label' for the new password input. 'for' should be "new-password". -->
+            <div class="mb-3">
+              <label for="new-password" class="form-label">New Password</label>
+              <!-- TODO: Add an 'input' for the new password.
+                             - type="password"
+                             - id="new-password"
+                             - minlength="8"
+                             - required -->
+              <input
+                type="password"
+                id="new-password"
+                class="form-control"
+                minlength="8"
+                required
+              />
+            </div>
 
-                    <!-- TODO: Add a 'label' for the new password input. 'for' should be "new-password". -->
-                    <!-- TODO: Add an 'input' for the new password.
-                         - type="password"
-                         - id="new-password"
-                         - minlength="8"
-                         - required -->
+            <!-- TODO: Add a 'label' for the confirm password input. 'for' should be "confirm-password". -->
+            <div class="mb-3">
+              <label for="confirm-password" class="form-label"
+                >Confirm Password</label
+              >
+              <!-- TODO: Add an 'input' to confirm the new password.
+                             - type="password"
+                             - id="confirm-password"
+                             - required -->
+              <input
+                type="password"
+                id="confirm-password"
+                class="form-control"
+                required
+              />
+            </div>
 
-                    <!-- TODO: Add a 'label' for the confirm password input. 'for' should be "confirm-password". -->
-                    <!-- TODO: Add an 'input' to confirm the new password.
-                         - type="password"
-                         - id="confirm-password"
-                         - required -->
-
-                    <!-- TODO: Add a 'button' to submit the form.
+            <!-- TODO: Add a 'button' to submit the form.
                          - type="submit"
                          - id="change"
                          - Text: "Update Password" -->
+            <button type="submit" id="change" class="btn btn-primary">
+              Update Password
+            </button>
 
-                <!-- End of the fieldset. -->
-            <!-- End of the password form. -->
+            <!-- End of the fieldset. -->
+          </fieldset>
+          <!-- End of the password form. -->
+        </form>
         <!-- End of the password management section. -->
+      </section>
 
+      <!-- Section 2: Student Management -->
+      <!-- TODO: Create another 'section' for the student management functionality. -->
+      <section>
+        <!-- TODO: Add a sub-heading (e.g., 'h2') with the text "Manage Students". -->
+        <h2 class="mb-3">Manage Students</h2>
 
-        <!-- Section 2: Student Management -->
-        <!-- TODO: Create another 'section' for the student management functionality. -->
-            <!-- TODO: Add a sub-heading (e.g., 'h2') with the text "Manage Students". -->
+        <!-- Subsection 2.1: Add New Student Form -->
+        <!-- TODO: Create a 'details' element so the "Add Student" form can be collapsed. -->
+        <details class="mb-4">
+          <!-- TODO: Add a 'summary' element inside 'details' with the text "Add New Student". -->
+          <summary class="btn btn-success mb-3">Add New Student</summary>
 
-            <!-- Subsection 2.1: Add New Student Form -->
-            <!-- TODO: Create a 'details' element so the "Add Student" form can be collapsed. -->
-                <!-- TODO: Add a 'summary' element inside 'details' with the text "Add New Student". -->
+          <!-- TODO: Create a 'form' for adding a new student. 'action' can be '#'. -->
+          <form action="#" class="card p-4">
+            <!-- TODO: Use a 'fieldset' to group the new student fields. -->
+            <fieldset>
+              <!-- TODO: Add a 'legend' for the fieldset, e.g., "New Student Information". -->
+              <legend class="h5">New Student Information</legend>
 
-                <!-- TODO: Create a 'form' for adding a new student. 'action' can be '#'. -->
-                    <!-- TODO: Use a 'fieldset' to group the new student fields. -->
-                        <!-- TODO: Add a 'legend' for the fieldset, e.g., "New Student Information". -->
-
-                        <!-- TODO: Add a 'label' and 'input' for the student's full name.
+              <!-- TODO: Add a 'label' and 'input' for the student's full name.
                              - label 'for': "student-name"
                              - input 'id': "student-name"
                              - input 'type': "text"
                              - input: required -->
+              <div class="mb-3">
+                <label for="student-name" class="form-label">Full Name</label>
+                <input
+                  type="text"
+                  id="student-name"
+                  class="form-control"
+                  required
+                />
+              </div>
 
-                        <!-- TODO: Add a 'label' and 'input' for the student's ID.
+              <!-- TODO: Add a 'label' and 'input' for the student's ID.
                              - label 'for': "student-id"
                              - input 'id': "student-id"
                              - input 'type': "text"
                              - input: required -->
+              <div class="mb-3">
+                <label for="student-id" class="form-label">Student ID</label>
+                <input
+                  type="text"
+                  id="student-id"
+                  class="form-control"
+                  required
+                />
+              </div>
 
-                        <!-- TODO: Add a 'label' and 'input' for the student's email.
+              <!-- TODO: Add a 'label' and 'input' for the student's email.
                              - label 'for': "student-email"
                              - input 'id': "student-email"
                              - input 'type': "email"
                              - input: required -->
-                        
-                        <!-- TODO: Add a 'label' and 'input' for the default password.
+              <div class="mb-3">
+                <label for="student-email" class="form-label">Email</label>
+                <input
+                  type="email"
+                  id="student-email"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <!-- TODO: Add a 'label' and 'input' for the default password.
                              - label 'for': "default-password"
                              - input 'id': "default-password"
                              - input 'type': "text"
                              - You can pre-fill this with a value like "password123" or leave it blank. -->
+              <div class="mb-3">
+                <label for="default-password" class="form-label"
+                  >Default Password</label
+                >
+                <input
+                  type="text"
+                  id="default-password"
+                  class="form-control"
+                  value="password123"
+                />
+              </div>
 
-                        <!-- TODO: Add a 'button' to submit the form.
+              <!-- TODO: Add a 'button' to submit the form.
                              - type="submit"
                              - id="add"
                              - Text: "Add Student" -->
+              <button type="submit" id="add" class="btn btn-primary">
+                Add Student
+              </button>
 
-                    <!-- End of the fieldset. -->
-                <!-- End of the add student form. -->
-            <!-- End of the 'details' element. -->
+              <!-- End of the fieldset. -->
+            </fieldset>
+            <!-- End of the add student form. -->
+          </form>
+          <!-- End of the 'details' element. -->
+        </details>
 
+        <!-- Subsection 2.2: Student List -->
+        <!-- TODO: Add a sub-heading (e.g., 'h3') for the list of students, "Registered Students". -->
+        <h3 class="mb-3">Registered Students</h3>
 
-            <!-- Subsection 2.2: Student List -->
-            <!-- TODO: Add a sub-heading (e.g., 'h3') for the list of students, "Registered Students". -->
+        <!-- TODO: Create a 'table' to display the list of students. Give it an id="student-table". -->
+        <table id="student-table" class="table table-striped table-hover">
+          <!-- TODO: Create a 'thead' for the table headers. -->
+          <thead class="table-dark">
+            <!-- TODO: Create a 'tr' (table row) inside the 'thead'. -->
+            <tr>
+              <!-- TODO: Create 'th' (table header) cells for "Name", "Student ID", "Email", and "Actions". -->
+              <th>Name</th>
+              <th>Student ID</th>
+              <th>Email</th>
+              <th>Actions</th>
+              <!-- End of the row. -->
+            </tr>
+            <!-- End of 'thead'. -->
+          </thead>
 
-            <!-- TODO: Create a 'table' to display the list of students. Give it an id="student-table". -->
-                <!-- TODO: Create a 'thead' for the table headers. -->
-                    <!-- TODO: Create a 'tr' (table row) inside the 'thead'. -->
-                        <!-- TODO: Create 'th' (table header) cells for "Name", "Student ID", "Email", and "Actions". -->
-                    <!-- End of the row. -->
-                <!-- End of 'thead'. -->
+          <!-- TODO: Create a 'tbody' for the table body, where student data will go. -->
+          <tbody>
+            <!-- TODO: For now, add 2-3 rows of dummy data so you can see how the table is structured. -->
+            <!-- Example Student Row: -->
+            <!-- TODO: Create a 'tr' for a student record. -->
+            <tr>
+              <!-- TODO: Create 'td' (table data) cells for a student's name (e.g., "John Doe"), ID (e.g., "12345"), and email (e.g., "john.doe@example.com"). -->
+              <td>John Doe</td>
+              <td>12345</td>
+              <td>john.doe@example.com</td>
 
-                <!-- TODO: Create a 'tbody' for the table body, where student data will go. -->
-                    <!-- TODO: For now, add 2-3 rows of dummy data so you can see how the table is structured. -->
-                    <!-- Example Student Row: -->
-                    <!-- TODO: Create a 'tr' for a student record. -->
-                        <!-- TODO: Create 'td' (table data) cells for a student's name (e.g., "John Doe"), ID (e.g., "12345"), and email (e.g., "john.doe@example.com"). -->
-                        
-                        <!-- TODO: Create a final 'td' for action buttons. -->
-                            <!-- TODO: Add an "Edit" button. -->
-                            <!-- TODO: Add a "Delete" button. -->
-                        <!-- End of the actions 'td'. -->
-                    <!-- End of the student row. -->
+              <!-- TODO: Create a final 'td' for action buttons. -->
+              <td>
+                <!-- TODO: Add an "Edit" button. -->
+                <button class="btn btn-sm btn-warning">Edit</button>
+                <!-- TODO: Add a "Delete" button. -->
+                <button class="btn btn-sm btn-danger">Delete</button>
+                <!-- End of the actions 'td'. -->
+              </td>
+              <!-- End of the student row. -->
+            </tr>
 
-                    <!-- TODO: Add another 'tr' for a second student as another example. -->
-                <!-- End of 'tbody'. -->
-            <!-- End of the table. -->
+            <!-- TODO: Add another 'tr' for a second student as another example. -->
+            <tr>
+              <td>Jane Smith</td>
+              <td>67890</td>
+              <td>jane.smith@example.com</td>
+              <td>
+                <button class="btn btn-sm btn-warning">Edit</button>
+                <button class="btn btn-sm btn-danger">Delete</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Bob Johnson</td>
+              <td>54321</td>
+              <td>bob.johnson@example.com</td>
+              <td>
+                <button class="btn btn-sm btn-warning">Edit</button>
+                <button class="btn btn-sm btn-danger">Delete</button>
+              </td>
+            </tr>
+            <!-- End of 'tbody'. -->
+          </tbody>
+          <!-- End of the table. -->
+        </table>
 
         <!-- End of the student management section. -->
+      </section>
 
-    <!-- End of the main content area. -->
+      <!-- End of the main content area. -->
+    </main>
 
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>
-

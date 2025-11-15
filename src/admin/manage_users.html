@@ -23,6 +23,7 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <script src="manage_users.js" defer></script>
   </head>
   <body>
     <!-- TODO: Create a 'header' element for the top of the page. -->
@@ -43,7 +44,7 @@
         <h2 class="mb-3">Change Your Password</h2>
 
         <!-- TODO: Create a 'form' for changing the password. The 'action' can be '#'. -->
-        <form action="#" class="card p-4">
+        <form class="card p-4" id="password-form">
           <!-- TODO: Use a 'fieldset' to group the password-related fields. -->
           <fieldset>
             <!-- TODO: Add a 'legend' for the fieldset, e.g., "Password Update". -->
@@ -121,6 +122,17 @@
         <!-- TODO: Add a sub-heading (e.g., 'h2') with the text "Manage Students". -->
         <h2 class="mb-3">Manage Students</h2>
 
+        <!-- TODO: Add a search input field to filter students. -->
+        <div class="mb-4">
+          <label for="search-input" class="form-label">Search Students</label>
+          <input
+            type="text"
+            id="search-input"
+            class="form-control"
+            placeholder="Search by name"
+          />
+        </div>
+
         <!-- Subsection 2.1: Add New Student Form -->
         <!-- TODO: Create a 'details' element so the "Add Student" form can be collapsed. -->
         <details class="mb-4">
@@ -128,7 +140,7 @@
           <summary class="btn btn-success mb-3">Add New Student</summary>
 
           <!-- TODO: Create a 'form' for adding a new student. 'action' can be '#'. -->
-          <form action="#" class="card p-4">
+          <form action="#" class="card p-4" id="add-student-form">
             <!-- TODO: Use a 'fieldset' to group the new student fields. -->
             <fieldset>
               <!-- TODO: Add a 'legend' for the fieldset, e.g., "New Student Information". -->

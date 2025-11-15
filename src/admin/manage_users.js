@@ -18,18 +18,20 @@ let students = [];
 // the HTML document is parsed before this script runs.
 
 // TODO: Select the student table body (tbody).
+let tableBody = document.querySelector("tbody");
 
 // TODO: Select the "Add Student" form.
 // (You'll need to add id="add-student-form" to this form in your HTML).
-
+let addStudentForm = document.getElementById("add-student-form");
 // TODO: Select the "Change Password" form.
 // (You'll need to add id="password-form" to this form in your HTML).
+let changePasswordForm = document.getElementById("password-form");
 
 // TODO: Select the search input field.
 // (You'll need to add id="search-input" to this input in your HTML).
-
+let searchInput = document.getElementById("search-input");
 // TODO: Select all table header (th) elements in thead.
-
+let tableHeaders = document.querySelectorAll("thead th");
 // --- Functions ---
 
 /**
@@ -44,7 +46,39 @@ let students = [];
  * - A "Delete" button with class "delete-btn" and a data-id attribute set to the student's ID.
  */
 function createStudentRow(student) {
-  // ... your implementation here ...
+  let tr = document.createElement("tr");
+  tr.classList.add("table-light"); // Bootstrap class for table rows
+
+  let nameTd = document.createElement("td");
+  nameTd.textContent = student.name;
+
+  let idTd = document.createElement("td");
+  idTd.textContent = student.id;
+
+  let emailTd = document.createElement("td");
+  emailTd.textContent = student.email;
+
+  let actionsTd = document.createElement("td");
+
+  let editBtn = document.createElement("button");
+  editBtn.textContent = "Edit";
+  editBtn.classList.add("btn", "btn-warning", "btn-sm", "edit-btn", "me-2"); // Added margin-end for spacing
+  editBtn.setAttribute("data-id", student.id);
+
+  let deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Delete";
+  deleteBtn.classList.add("btn", "btn-danger", "btn-sm", "delete-btn");
+  deleteBtn.setAttribute("data-id", student.id);
+
+  actionsTd.appendChild(editBtn);
+  actionsTd.appendChild(deleteBtn);
+
+  tr.appendChild(nameTd);
+  tr.appendChild(idTd);
+  tr.appendChild(emailTd);
+  tr.appendChild(actionsTd);
+
+  return tr;
 }
 
 /**
@@ -57,6 +91,11 @@ function createStudentRow(student) {
  */
 function renderTable(studentArray) {
   // ... your implementation here ...
+  tableBody.innerHTML = "";
+  studentArray.forEach((student) => {
+    let row = createStudentRow(student);
+    tableBody.appendChild(row);
+  });
 }
 
 /**
@@ -73,6 +112,23 @@ function renderTable(studentArray) {
  */
 function handleChangePassword(event) {
   // ... your implementation here ...
+  event.preventDefault();
+
+  const currentPassword = document.getElementById("current-password").value;
+  const newPassword = document.getElementById("new-password").value;
+  const confirmPassword = document.getElementById("confirm-password").value;
+  if (newPassword !== confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
+  if (newPassword.length < 8) {
+    alert("Password must be at least 8 characters.");
+    return;
+  }
+  alert("Password updated successfully!");
+  document.getElementById("current-password").value = "";
+  document.getElementById("new-password").value = "";
+  document.getElementById("confirm-password").value = "";
 }
 
 /**
@@ -92,6 +148,21 @@ function handleChangePassword(event) {
  */
 function handleAddStudent(event) {
   // ... your implementation here ...
+  event.preventDefault();
+  const name = document.getElementById("student-name").value;
+  const id = document.getElementById("student-id").value;
+  const email = document.getElementById("student-email").value;
+  if (name === "" || id === "" || email === "") {
+    alert("Please fill out all required fields.");
+    return;
+  }
+  const newStudent = { name, id, email };
+  students.push(newStudent);
+  renderTable(students);
+  document.getElementById("student-name").value = "";
+  document.getElementById("student-id").value = "";
+  document.getElementById("student-email").value = "";
+  document.getElementById("default-password").value = "";
 }
 
 /**
@@ -107,6 +178,14 @@ function handleAddStudent(event) {
  */
 function handleTableClick(event) {
   // ... your implementation here ...
+  if (event.target.classList.contains("delete-btn")) {
+    const studentId = event.target.getAttribute("data-id");
+    students = students.filter((student) => student.id !== studentId);
+    renderTable(students);
+  }
+  if (event.target.classList.contains("edit-btn")) {
+    // ... your implementation here ...
+  }
 }
 
 /**
@@ -122,6 +201,15 @@ function handleTableClick(event) {
  */
 function handleSearch(event) {
   // ... your implementation here ...
+  const searchTerm = searchInput.value.toLowerCase();
+  if (searchTerm === "") {
+    renderTable(students);
+    return;
+  }
+  const filteredStudents = students.filter((student) =>
+    student.name.toLowerCase().includes(searchTerm)
+  );
+  renderTable(filteredStudents);
 }
 
 /**
@@ -140,6 +228,34 @@ function handleSearch(event) {
  */
 function handleSort(event) {
   // ... your implementation here ...
+  const th = event.currentTarget;
+  const columnIndex = th.cellIndex;
+  let sortProperty;
+
+  if (columnIndex === 0) {
+    sortProperty = "name";
+  } else if (columnIndex === 1) {
+    sortProperty = "id";
+  } else {
+    sortProperty = "email";
+  }
+
+  const sortDirection = th.getAttribute("data-sort-dir") || "asc";
+
+  students.sort((a, b) => {
+    if (sortProperty === "name" || sortProperty === "email") {
+      return sortDirection === "asc"
+        ? a[sortProperty].localeCompare(b[sortProperty])
+        : b[sortProperty].localeCompare(a[sortProperty]);
+    } else {
+      return sortDirection === "asc"
+        ? a[sortProperty] - b[sortProperty]
+        : b[sortProperty] - a[sortProperty];
+    }
+  });
+
+  th.setAttribute("data-sort-dir", sortDirection === "asc" ? "desc" : "asc");
+  renderTable(students);
 }
 
 /**
@@ -160,6 +276,23 @@ function handleSort(event) {
  */
 async function loadStudentsAndInitialize() {
   // ... your implementation here ...
+  try {
+    const response = await fetch("api/students.json");
+    if (!response.ok) {
+      console.error("Failed to fetch students.json");
+      return;
+    }
+    students = await response.json();
+    renderTable(students);
+
+    changePasswordForm.addEventListener("submit", handleChangePassword);
+    addStudentForm.addEventListener("submit", handleAddStudent);
+    tableBody.addEventListener("click", handleTableClick);
+    searchInput.addEventListener("input", handleSearch);
+    tableHeaders.forEach((th) => th.addEventListener("click", handleSort));
+  } catch (error) {
+    console.error("An error occurred:", error);
+  }
 }
 
 // --- Initial Page Load ---

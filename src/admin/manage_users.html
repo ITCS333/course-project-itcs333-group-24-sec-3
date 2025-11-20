@@ -257,7 +257,9 @@
               <!-- TODO: Create a final 'td' for action buttons. -->
               <td>
                 <!-- TODO: Add an "Edit" button. -->
-                <button class="btn btn-sm btn-warning">Edit</button>
+                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editStudentModal">
+                  Edit
+                </button>
                 <!-- TODO: Add a "Delete" button. -->
                 <button class="btn btn-sm btn-danger">Delete</button>
                 <!-- End of the actions 'td'. -->
@@ -271,7 +273,9 @@
               <td>67890</td>
               <td>jane.smith@example.com</td>
               <td>
-                <button class="btn btn-sm btn-warning">Edit</button>
+                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editStudentModal">
+                  Edit
+                </button>
                 <button class="btn btn-sm btn-danger">Delete</button>
               </td>
             </tr>
@@ -280,7 +284,9 @@
               <td>54321</td>
               <td>bob.johnson@example.com</td>
               <td>
-                <button class="btn btn-sm btn-warning">Edit</button>
+                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editStudentModal">
+                  Edit
+                </button>
                 <button class="btn btn-sm btn-danger">Delete</button>
               </td>
             </tr>
@@ -291,6 +297,73 @@
 
         <!-- End of the student management section. -->
       </section>
+
+      <!-- Add Bootstrap Modal for Editing Student -->
+      <div
+        class="modal fade"
+        id="editStudentModal"
+        tabindex="-1"
+        aria-labelledby="editStudentModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form id="edit-student-form">
+              <div class="modal-header">
+                <h5 class="modal-title" id="editStudentModalLabel">Edit Student</h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="edit-student-name" class="form-label">Full Name</label>
+                  <input
+                    type="text"
+                    id="edit-student-name"
+                    class="form-control"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="edit-student-id" class="form-label">Student ID</label>
+                  <input
+                    type="text"
+                    id="edit-student-id"
+                    class="form-control"
+                    readonly
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="edit-student-email" class="form-label">Email</label>
+                  <input
+                    type="email"
+                    id="edit-student-email"
+                    class="form-control"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Cancel
+                </button>
+                <button type="submit" class="btn btn-primary">
+                  Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- End Edit Student Modal -->
 
       <!-- End of the main content area. -->
     </main>

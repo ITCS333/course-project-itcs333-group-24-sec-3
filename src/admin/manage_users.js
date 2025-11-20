@@ -32,6 +32,13 @@ let changePasswordForm = document.getElementById("password-form");
 let searchInput = document.getElementById("search-input");
 // TODO: Select all table header (th) elements in thead.
 let tableHeaders = document.querySelectorAll("thead th");
+
+let editStudentModal = document.getElementById("editStudentModal");
+let editStudentForm = document.getElementById("edit-student-form");
+let editStudentName = document.getElementById("edit-student-name");
+let editStudentId = document.getElementById("edit-student-id");
+let editStudentEmail = document.getElementById("edit-student-email");
+let currentEditStudentId = null;
 // --- Functions ---
 
 /**
@@ -265,9 +272,61 @@ function handleTableClick(event) {
     }
   }
   if (event.target.classList.contains("edit-btn")) {
-    // ... your implementation here ...
+    const studentId = event.target.getAttribute("data-id");
+    const student = students.find(
+      (s) => s.id == studentId || s.student_id == studentId
+    );
+    if (student) {
+      // Fill modal fields
+      editStudentName.value = student.name;
+      editStudentId.value = student.id || student.student_id;
+      editStudentEmail.value = student.email;
+      currentEditStudentId = student.id || student.student_id;
+      // Show modal
+      let modal = new bootstrap.Modal(editStudentModal);
+      modal.show();
+    }
   }
 }
+
+editStudentForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+  const updatedName = editStudentName.value;
+  const updatedEmail = editStudentEmail.value;
+  const studentId = currentEditStudentId;
+  fetch("api/index.php", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      student_id: studentId,
+      name: updatedName,
+      email: updatedEmail,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status === "success") {
+        // Hide modal
+        let modal = bootstrap.Modal.getInstance(editStudentModal);
+        modal.hide();
+        // Refresh table
+        loadStudentsAndInitialize();
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Error updating student",
+          text: data.message || "Unknown error",
+        });
+      }
+    })
+    .catch((error) => {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "An error occurred while updating the student.",
+      });
+    });
+});
 
 /**
  * TODO: Implement the handleSearch function.
@@ -316,12 +375,16 @@ function handleSort(event) {
   // ... your implementation here ...
   const th = event.currentTarget;
   const columnIndex = th.cellIndex;
+  // Prevent sorting for Actions column (index 3)
+  if (columnIndex === 3) {
+    return;
+  }
   let sortProperty;
 
   if (columnIndex === 0) {
     sortProperty = "name";
   } else if (columnIndex === 1) {
-    sortProperty = "student_id"; // Changed from 'id' to match DB column/API param
+    sortProperty = "id"; // Changed from 'id' to match DB column/API param
   } else {
     sortProperty = "email";
   }

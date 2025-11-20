@@ -94,7 +94,7 @@ function getStudents($db) {
     // Validate order to prevent SQL injection (only allow: asc, desc)
     $sort = isset($_GET['sort']) ? $_GET['sort'] : 'name';
     $order = (isset($_GET['order']) && strtolower($_GET['order']) === 'desc') ? 'DESC' : 'ASC';
-    $allowedSortFields = ['name', 'student_id', 'email'];
+    $allowedSortFields = ['name', 'id', 'email'];
     if (!in_array($sort, $allowedSortFields, true)) {
         $sort = 'name';
     }
@@ -292,7 +292,7 @@ function updateStudent($db, $data) {
     // If not found, return error response with 404 status
     $sql = 'SELECT id FROM users WHERE id LIKE ?';
     $stmt = $db->prepare($sql);
-    $stmt->bindParam('', $student_id, PDO::PARAM_INT);
+    $stmt->bindParam(1, $student_id, PDO::PARAM_INT);
     $stmt->execute();
     $student = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!isset($student)) {

@@ -117,6 +117,7 @@ function handleChangePassword(event) {
   const currentPassword = document.getElementById("current-password").value;
   const newPassword = document.getElementById("new-password").value;
   const confirmPassword = document.getElementById("confirm-password").value;
+
   if (newPassword !== confirmPassword) {
     alert("Passwords do not match.");
     return;
@@ -125,10 +126,43 @@ function handleChangePassword(event) {
     alert("Password must be at least 8 characters.");
     return;
   }
-  alert("Password updated successfully!");
-  document.getElementById("current-password").value = "";
-  document.getElementById("new-password").value = "";
-  document.getElementById("confirm-password").value = "";
+
+  // Get logged-in user from localStorage
+  const userData = localStorage.getItem("user");
+  if (!userData) {
+    alert("You must be logged in to change password.");
+    return;
+  }
+  const user = JSON.parse(userData);
+
+  // Send request to API
+  fetch("api/index.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      action: "change_password",
+      student_id: user.id,
+      current_password: currentPassword,
+      new_password: newPassword,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status === "success") {
+        alert("Password updated successfully!");
+        document.getElementById("current-password").value = "";
+        document.getElementById("new-password").value = "";
+        document.getElementById("confirm-password").value = "";
+      } else {
+        alert("Error updating password: " + (data.message || "Unknown error"));
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("An error occurred while updating the password.");
+    });
 }
 
 /**
@@ -152,17 +186,45 @@ function handleAddStudent(event) {
   const name = document.getElementById("student-name").value;
   const id = document.getElementById("student-id").value;
   const email = document.getElementById("student-email").value;
+  const password = document.getElementById("default-password").value;
+
   if (name === "" || id === "" || email === "") {
     alert("Please fill out all required fields.");
     return;
   }
-  const newStudent = { name, id, email };
-  students.push(newStudent);
-  renderTable(students);
-  document.getElementById("student-name").value = "";
-  document.getElementById("student-id").value = "";
-  document.getElementById("student-email").value = "";
-  document.getElementById("default-password").value = "";
+
+  const newStudent = {
+    name: name,
+    student_id: id,
+    email: email,
+    password: password,
+  };
+
+  fetch("api/index.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newStudent),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status === "success") {
+        // Refresh the list to show the new student
+        loadStudentsAndInitialize();
+
+        document.getElementById("student-name").value = "";
+        document.getElementById("student-id").value = "";
+        document.getElementById("student-email").value = "";
+        document.getElementById("default-password").value = "";
+      } else {
+        alert("Error adding student: " + (data.message || "Unknown error"));
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("An error occurred while adding the student.");
+    });
 }
 
 /**
@@ -180,8 +242,27 @@ function handleTableClick(event) {
   // ... your implementation here ...
   if (event.target.classList.contains("delete-btn")) {
     const studentId = event.target.getAttribute("data-id");
-    students = students.filter((student) => student.id !== studentId);
-    renderTable(students);
+
+    if (confirm("Are you sure you want to delete this student?")) {
+      fetch(`api/index.php?student_id=${studentId}`, {
+        method: "DELETE",
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success") {
+            // Refresh the list
+            loadStudentsAndInitialize();
+          } else {
+            alert(
+              "Error deleting student: " + (data.message || "Unknown error")
+            );
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("An error occurred while deleting the student.");
+        });
+    }
   }
   if (event.target.classList.contains("edit-btn")) {
     // ... your implementation here ...
@@ -201,15 +282,20 @@ function handleTableClick(event) {
  */
 function handleSearch(event) {
   // ... your implementation here ...
-  const searchTerm = searchInput.value.toLowerCase();
-  if (searchTerm === "") {
-    renderTable(students);
-    return;
+  const searchTerm = searchInput.value.trim();
+
+  let url = "api/index.php";
+  if (searchTerm !== "") {
+    url += `?search=${encodeURIComponent(searchTerm)}`;
   }
-  const filteredStudents = students.filter((student) =>
-    student.name.toLowerCase().includes(searchTerm)
-  );
-  renderTable(filteredStudents);
+
+  fetch(url)
+    .then((response) => response.json())
+    .then((jsonResponse) => {
+      students = jsonResponse.data || [];
+      renderTable(students);
+    })
+    .catch((error) => console.error("Error searching students:", error));
 }
 
 /**
@@ -235,27 +321,25 @@ function handleSort(event) {
   if (columnIndex === 0) {
     sortProperty = "name";
   } else if (columnIndex === 1) {
-    sortProperty = "id";
+    sortProperty = "student_id"; // Changed from 'id' to match DB column/API param
   } else {
     sortProperty = "email";
   }
 
-  const sortDirection = th.getAttribute("data-sort-dir") || "asc";
+  const currentSortDir = th.getAttribute("data-sort-dir") || "asc";
+  const newSortDir = currentSortDir === "asc" ? "desc" : "asc";
 
-  students.sort((a, b) => {
-    if (sortProperty === "name" || sortProperty === "email") {
-      return sortDirection === "asc"
-        ? a[sortProperty].localeCompare(b[sortProperty])
-        : b[sortProperty].localeCompare(a[sortProperty]);
-    } else {
-      return sortDirection === "asc"
-        ? a[sortProperty] - b[sortProperty]
-        : b[sortProperty] - a[sortProperty];
-    }
-  });
+  // Update UI state
+  th.setAttribute("data-sort-dir", newSortDir);
 
-  th.setAttribute("data-sort-dir", sortDirection === "asc" ? "desc" : "asc");
-  renderTable(students);
+  // Fetch sorted data from API
+  fetch(`api/index.php?sort=${sortProperty}&order=${newSortDir}`)
+    .then((response) => response.json())
+    .then((jsonResponse) => {
+      students = jsonResponse.data || [];
+      renderTable(students);
+    })
+    .catch((error) => console.error("Error sorting students:", error));
 }
 
 /**
@@ -277,12 +361,13 @@ function handleSort(event) {
 async function loadStudentsAndInitialize() {
   // ... your implementation here ...
   try {
-    const response = await fetch("api/students.json");
+    const response = await fetch("api/index.php");
     if (!response.ok) {
-      console.error("Failed to fetch students.json");
+      console.error("Failed to fetch students from API");
       return;
     }
-    students = await response.json();
+    const jsonResponse = await response.json();
+    students = jsonResponse.data || [];
     renderTable(students);
 
     changePasswordForm.addEventListener("submit", handleChangePassword);

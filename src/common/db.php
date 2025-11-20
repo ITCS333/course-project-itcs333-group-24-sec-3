@@ -8,7 +8,12 @@ function getDatabaseConnection(): PDO
         return $connection;
     }
 
-    $databasePath = __DIR__ . '/../../database.db';
+    $host = 'localhost';
+    $dbname = 'course';
+    $user = 'root';
+    $pass = 'password123';
+
+    $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
 
     $options = [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -16,10 +21,9 @@ function getDatabaseConnection(): PDO
         PDO::ATTR_EMULATE_PREPARES => false,
     ];
 
-    $connection = new PDO('sqlite:' . $databasePath, null, null, $options);
-    $connection->exec('PRAGMA foreign_keys = ON');
+    $connection = new PDO($dsn, $user, $pass, $options);
 
-    initializeResourcesSchema($connection);
+    // initializeResourcesSchema($connection);
 
     return $connection;
 }

@@ -110,9 +110,35 @@ function handleLogin(event) {
     displayMessage("Password must be at least 8 characters.", "error");
     return;
   }
-  displayMessage("Login successful!", "success");
-  emailInput.value = "";
-  passwordInput.value = "";
+
+  // Send login request to API
+  fetch("api/index.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        emailInput.value = "";
+        passwordInput.value = "";
+        displayMessage("Login successful!", "success");
+        // Store user data in localStorage
+        localStorage.setItem("user", JSON.stringify(data.user));
+        // Redirect to homepage after a short delay
+        setTimeout(() => {
+          window.location.href = "../../";
+        }, 1000);
+      } else {
+        displayMessage(data.message || "Login failed.", "error");
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      displayMessage("An error occurred. Please try again.", "error");
+    });
 }
 
 /**

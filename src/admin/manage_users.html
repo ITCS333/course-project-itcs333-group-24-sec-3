@@ -129,7 +129,7 @@
             type="text"
             id="search-input"
             class="form-control"
-            placeholder="Search by name"
+            placeholder="Search"
           />
         </div>
 
@@ -257,7 +257,11 @@
               <!-- TODO: Create a final 'td' for action buttons. -->
               <td>
                 <!-- TODO: Add an "Edit" button. -->
-                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editStudentModal">
+                <button
+                  class="btn btn-sm btn-warning"
+                  data-bs-toggle="modal"
+                  data-bs-target="#editStudentModal"
+                >
                   Edit
                 </button>
                 <!-- TODO: Add a "Delete" button. -->
@@ -273,7 +277,11 @@
               <td>67890</td>
               <td>jane.smith@example.com</td>
               <td>
-                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editStudentModal">
+                <button
+                  class="btn btn-sm btn-warning"
+                  data-bs-toggle="modal"
+                  data-bs-target="#editStudentModal"
+                >
                   Edit
                 </button>
                 <button class="btn btn-sm btn-danger">Delete</button>
@@ -284,7 +292,11 @@
               <td>54321</td>
               <td>bob.johnson@example.com</td>
               <td>
-                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editStudentModal">
+                <button
+                  class="btn btn-sm btn-warning"
+                  data-bs-toggle="modal"
+                  data-bs-target="#editStudentModal"
+                >
                   Edit
                 </button>
                 <button class="btn btn-sm btn-danger">Delete</button>
@@ -310,7 +322,9 @@
           <div class="modal-content">
             <form id="edit-student-form">
               <div class="modal-header">
-                <h5 class="modal-title" id="editStudentModalLabel">Edit Student</h5>
+                <h5 class="modal-title" id="editStudentModalLabel">
+                  Edit Student
+                </h5>
                 <button
                   type="button"
                   class="btn-close"
@@ -320,7 +334,9 @@
               </div>
               <div class="modal-body">
                 <div class="mb-3">
-                  <label for="edit-student-name" class="form-label">Full Name</label>
+                  <label for="edit-student-name" class="form-label"
+                    >Full Name</label
+                  >
                   <input
                     type="text"
                     id="edit-student-name"
@@ -329,7 +345,9 @@
                   />
                 </div>
                 <div class="mb-3">
-                  <label for="edit-student-id" class="form-label">Student ID</label>
+                  <label for="edit-student-id" class="form-label"
+                    >Student ID</label
+                  >
                   <input
                     type="text"
                     id="edit-student-id"
@@ -338,7 +356,9 @@
                   />
                 </div>
                 <div class="mb-3">
-                  <label for="edit-student-email" class="form-label">Email</label>
+                  <label for="edit-student-email" class="form-label"
+                    >Email</label
+                  >
                   <input
                     type="email"
                     id="edit-student-email"

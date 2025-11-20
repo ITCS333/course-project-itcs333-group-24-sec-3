@@ -24,7 +24,13 @@ let currentComments = [];
 
 // --- Element Selections ---
 // TODO: Select all the elements you added IDs for in step 2.
-
+const assignmentTitle = document.getElementById("assignment-title");
+const assignmentDueDate = document.getElementById("assignment-due-date");
+const assignmentDescription = document.getElementById("assignment-description");
+const assignmentFilesList = document.getElementById("assignment-files-list");
+const commentList = document.getElementById("comment-list");
+const commentForm = document.getElementById("comment-form");
+const newCommentText = document.getElementById("new-comment-text");
 // --- Functions ---
 
 /**
@@ -36,6 +42,8 @@ let currentComments = [];
  */
 function getAssignmentIdFromURL() {
   // ... your implementation here ...
+  const params = new URLSearchParams(window.location.search);
+  return params.get("id");
 }
 
 /**
@@ -50,6 +58,20 @@ function getAssignmentIdFromURL() {
  */
 function renderAssignmentDetails(assignment) {
   // ... your implementation here ...
+ assignmentTitle.textContent = assignment.title;
+ assignmentDueDate.textContent = "Due: " + assignment.dueDate;
+ assignmentDescription.textContent = assignment.description;
+
+
+ assignmentFilesList.innerHTML = "";
+ assignment.files.forEach(file => {
+ const li = document.createElement("li");
+ const a = document.createElement("a");
+ a.href = "#";
+ a.textContent = file;
+ li.appendChild(a);
+ assignmentFilesList.appendChild(li);
+ });
 }
 
 /**
@@ -59,6 +81,18 @@ function renderAssignmentDetails(assignment) {
  */
 function createCommentArticle(comment) {
   // ... your implementation here ...
+  const article = document.createElement("article");
+  article.classList.add("comment");
+
+  const p = document.createElement("p");
+  const footer = document.createElement("footer");
+
+  p.textContent = comment.text;
+  footer.textContent = "Posted by: " + comment.author;
+
+  article.appendChild(p);
+  article.appendChild(footer);
+  return article;
 }
 
 /**
@@ -71,6 +105,11 @@ function createCommentArticle(comment) {
  */
 function renderComments() {
   // ... your implementation here ...
+  commentList.innerHTML = "";
+  currentComments.forEach(c => {
+  const article = createCommentArticle(c);
+  commentList.appendChild(article);
+  });
 }
 
 /**
@@ -88,6 +127,22 @@ function renderComments() {
  */
 function handleAddComment(event) {
   // ... your implementation here ...
+  event.preventDefault();
+
+
+  const text = newCommentText.value.trim();
+  if (!text) return;
+
+
+  const newComment = {
+  author: "Student",
+  text: text
+  };
+
+
+  currentComments.push(newComment);
+  renderComments();
+  newCommentText.value = "";
 }
 
 /**
@@ -108,6 +163,42 @@ function handleAddComment(event) {
  */
 async function initializePage() {
   // ... your implementation here ...
+  currentAssignmentId = getAssignmentIdFromURL();
+
+
+  if (!currentAssignmentId) {
+  assignmentTitle.textContent = "Error: No assignment ID found.";
+  return;
+  }
+
+
+  try {
+  const [assignmentsRes, commentsRes] = await Promise.all([
+  fetch("assignments.json"),
+  fetch("comments.json")
+  ]);
+
+
+  const assignments = await assignmentsRes.json();
+  const commentsData = await commentsRes.json();
+
+
+  const assignment = assignments.find(a => a.id == currentAssignmentId);
+  currentComments = commentsData[currentAssignmentId] || [];
+
+
+  if (assignment) {
+  renderAssignmentDetails(assignment);
+  renderComments();
+  commentForm.addEventListener("submit", handleAddComment);
+  } else {
+  assignmentTitle.textContent = "Error: Assignment not found.";
+  }
+
+
+  } catch (err) {
+  assignmentTitle.textContent = "Error loading data.";
+  }
 }
 
 // --- Initial Page Load ---

@@ -17,9 +17,10 @@ let assignments = [];
 
 // --- Element Selections ---
 // TODO: Select the assignment form ('#assignment-form').
+const assignmentForm = document.querySelector("#assignment-form");
 
 // TODO: Select the assignments table body ('#assignments-tbody').
-
+const assignmentsTableBody = document.querySelector("#assignments-tbody");
 // --- Functions ---
 
 /**
@@ -34,6 +35,18 @@ let assignments = [];
  */
 function createAssignmentRow(assignment) {
   // ... your implementation here ...
+  const tr = document.createElement("tr");
+
+  tr.innerHTML = `
+    <td>${assignment.title}</td>
+    <td>${assignment.dueDate}</td>
+    <td>
+      <button class="edit-btn" data-id="${assignment.id}">Edit</button>
+      <button class="delete-btn" data-id="${assignment.id}">Delete</button>
+    </td>
+  `;
+  
+  return tr;
 }
 
 /**
@@ -46,6 +59,12 @@ function createAssignmentRow(assignment) {
  */
 function renderTable() {
   // ... your implementation here ...
+  assignmentsTableBody.innerHTML = ""; // clear
+
+  assignments.forEach(asg => {
+    const row = createAssignmentRow(asg);
+    assignmentsTableBody.appendChild(row);
+  });
 }
 
 /**
@@ -61,6 +80,25 @@ function renderTable() {
  */
 function handleAddAssignment(event) {
   // ... your implementation here ...
+  event.preventDefault();
+
+  const title = assignmentForm.title.value.trim();
+  const description = assignmentForm.description.value.trim();
+  const dueDate = assignmentForm.dueDate.value;
+
+  const newAssignment = {
+    id: `asg_${Date.now()}`,
+    title,
+    description,
+    dueDate,
+  };
+
+  assignments.push(newAssignment);
+
+  renderTable();
+
+  assignmentForm.reset();
+ 
 }
 
 /**
@@ -75,6 +113,15 @@ function handleAddAssignment(event) {
  */
 function handleTableClick(event) {
   // ... your implementation here ...
+ const target = event.target;
+
+  if (target.classList.contains("delete-btn")) {
+    const id = target.dataset.id;
+
+    assignments = assignments.filter(asg => asg.id !== id);
+
+    renderTable();
+  }
 }
 
 /**
@@ -89,6 +136,17 @@ function handleTableClick(event) {
  */
 async function loadAndInitialize() {
   // ... your implementation here ...
+  try {
+    const response = await fetch("assignments.json");
+    assignments = await response.json();
+  } catch (err) {
+    console.error("Failed to load assignments.json", err);
+  }
+
+  renderTable();
+
+  assignmentForm.addEventListener("submit", handleAddAssignment);
+  assignmentsTableBody.addEventListener("click", handleTableClick);
 }
 
 // --- Initial Page Load ---

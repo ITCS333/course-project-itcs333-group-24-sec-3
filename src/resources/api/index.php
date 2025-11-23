@@ -283,7 +283,7 @@ function deleteResource(PDO $db, $resourceId): void
     $db->beginTransaction();
 
     try {
-        $deleteComments = $db->prepare('DELETE FROM comments WHERE resource_id = :id');
+        $deleteComments = $db->prepare('DELETE FROM comments_resource WHERE resource_id = :id');
         $deleteComments->bindValue(':id', $resourceId, PDO::PARAM_INT);
         $deleteComments->execute();
 
@@ -312,7 +312,7 @@ function getCommentsByResourceId(PDO $db, $resourceId): void
         ], 400);
     }
 
-    $stmt = $db->prepare('SELECT id, resource_id, author, text, created_at FROM comments WHERE resource_id = :id ORDER BY created_at ASC');
+    $stmt = $db->prepare('SELECT id, resource_id, author, text, created_at FROM comments_resource WHERE resource_id = :id ORDER BY created_at ASC');
     $stmt->bindValue(':id', (int) $resourceId, PDO::PARAM_INT);
     $stmt->execute();
     $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -356,7 +356,7 @@ function createComment(PDO $db, array $data): void
     $author = sanitizeInput($data['author']);
     $text = sanitizeInput($data['text']);
 
-    $stmt = $db->prepare('INSERT INTO comments (resource_id, author, text) VALUES (:resource_id, :author, :text)');
+    $stmt = $db->prepare('INSERT INTO comments_resource (resource_id, author, text) VALUES (:resource_id, :author, :text)');
     $stmt->bindValue(':resource_id', $resourceId, PDO::PARAM_INT);
     $stmt->bindValue(':author', $author);
     $stmt->bindValue(':text', $text);
@@ -378,7 +378,7 @@ function deleteComment(PDO $db, $commentId): void
         ], 400);
     }
 
-    $stmt = $db->prepare('SELECT id FROM comments WHERE id = :id');
+    $stmt = $db->prepare('SELECT id FROM comments_resource WHERE id = :id');
     $stmt->bindValue(':id', (int) $commentId, PDO::PARAM_INT);
     $stmt->execute();
 
@@ -389,7 +389,7 @@ function deleteComment(PDO $db, $commentId): void
         ], 404);
     }
 
-    $delete = $db->prepare('DELETE FROM comments WHERE id = :id');
+    $delete = $db->prepare('DELETE FROM comments_resource WHERE id = :id');
     $delete->bindValue(':id', (int) $commentId, PDO::PARAM_INT);
     $delete->execute();
 

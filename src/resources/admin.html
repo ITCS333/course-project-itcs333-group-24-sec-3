@@ -2,20 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Manage Resources</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
   </head>
-  <body class="bg-light">
-    <header class="bg-dark text-white py-4 mb-4">
+  <body>
+    <header class="bg-primary text-white py-4 mb-4">
       <div class="container">
-        <h1 class="mb-0 text-center">Manage Course Resources</h1>
+        <h1 class="text-center">Manage Course Resources</h1>
       </div>
     </header>
 
@@ -49,7 +46,9 @@
                 ></textarea>
               </div>
               <div class="mb-3">
-                <label for="resource-link" class="form-label">Resource Link</label>
+                <label for="resource-link" class="form-label"
+                  >Resource Link</label
+                >
                 <input
                   type="url"
                   id="resource-link"
@@ -74,7 +73,9 @@
 
       <section class="card shadow-sm">
         <div class="card-body">
-          <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-3">
+          <div
+            class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-3"
+          >
             <h2 class="card-title h4 mb-0">Existing Resources</h2>
             <div class="input-group w-100 w-md-auto">
               <span class="input-group-text">
@@ -91,7 +92,10 @@
             </div>
           </div>
           <div class="table-responsive">
-            <table class="table table-striped align-middle" id="resources-table">
+            <table
+              class="table table-striped align-middle"
+              id="resources-table"
+            >
               <thead class="table-dark">
                 <tr>
                   <th scope="col">Title</th>
@@ -144,7 +148,9 @@
             <div class="modal-body">
               <input type="hidden" id="edit-resource-id" />
               <div class="mb-3">
-                <label for="edit-resource-title" class="form-label">Title</label>
+                <label for="edit-resource-title" class="form-label"
+                  >Title</label
+                >
                 <input
                   type="text"
                   id="edit-resource-title"
@@ -164,7 +170,9 @@
                 ></textarea>
               </div>
               <div>
-                <label for="edit-resource-link" class="form-label">Resource Link</label>
+                <label for="edit-resource-link" class="form-label"
+                  >Resource Link</label
+                >
                 <input
                   type="url"
                   id="edit-resource-link"

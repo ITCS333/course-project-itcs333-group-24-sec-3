@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Character encoding -->
 <meta charset="UTF-8">
-<!-- Responsive viewport -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Page title -->
 <title>Manage Weekly Breakdown</title>
-<!-- Simple style (اختياري) -->
 <style>
        body {
            font-family: Arial, sans-serif;
@@ -47,13 +43,11 @@
 </style>
 </head>
 <body>
-<!-- Header -->
 <header>
 <h1>Manage Weekly Breakdown</h1>
 </header>
-<!-- Main content -->
 <main>
-<!-- Section 1: Add/Edit Week Form -->
+<!-- Section 1: Add Week -->
 <section>
 <h2>Add a New Week</h2>
 <form id="week-form" action="#">
@@ -71,7 +65,7 @@
 </fieldset>
 </form>
 </section>
-<!-- Section 2: Existing Weekly Entries -->
+<!-- Section 2: List of Weeks -->
 <section>
 <h2>Current Weekly Breakdown</h2>
 <table id="weeks-table">
@@ -82,29 +76,13 @@
 <th>Actions</th>
 </tr>
 </thead>
-<tbody>
-<!-- Dummy Row 1 -->
-<tr>
-<td>Week 1: Intro to HTML</td>
-<td>Basics of HTML tags and structure.</td>
-<td>
-<button>Edit</button>
-<button>Delete</button>
-</td>
-</tr>
-<!-- Dummy Row 2 -->
-<tr>
-<td>Week 2: Intro to CSS</td>
-<td>Selectors, properties, and styling pages.</td>
-<td>
-<button>Edit</button>
-<button>Delete</button>
-</td>
-</tr>
+<tbody id="weeks-tbody">
+<!-- Table rows will be added by JavaScript -->
 </tbody>
 </table>
 </section>
 </main>
+<!-- Linking JavaScript File -->
+<script src="admin.js" defer></script>
 </body>
 </html>
-

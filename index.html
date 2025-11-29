@@ -22,6 +22,7 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link href="src/common/neo-brutalism.css" rel="stylesheet" />
   </head>
   <body>
     <!-- TODO: Create a 'header' with a main heading ('h1') like "Welcome to the Web Development Course". -->
@@ -133,8 +134,10 @@
       }
 
       function logout() {
+        // Clear local storage
         localStorage.removeItem("user");
-        window.location.reload();
+        // Redirect to logout.php to destroy server session
+        window.location.href = "/src/auth/logout.php";
       }
     </script>
   </body>

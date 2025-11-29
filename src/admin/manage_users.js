@@ -148,6 +148,7 @@ function handleChangePassword(event) {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "same-origin",
     body: JSON.stringify({
       action: "change_password",
       student_id: user.id,
@@ -155,8 +156,18 @@ function handleChangePassword(event) {
       new_password: newPassword,
     }),
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (response.status === 401 || response.status === 403) {
+        alert(
+          "Your session has expired or you do not have permission. Please log in again."
+        );
+        window.location.href = "/src/auth/login.html";
+        return null;
+      }
+      return response.json();
+    })
     .then((data) => {
+      if (!data) return;
       if (data.status === "success") {
         alert("Password updated successfully!");
         document.getElementById("current-password").value = "";
@@ -212,10 +223,19 @@ function handleAddStudent(event) {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "same-origin",
     body: JSON.stringify(newStudent),
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (response.status === 401 || response.status === 403) {
+        alert("Authentication required. Please log in.");
+        window.location.href = "/src/auth/login.html";
+        return null;
+      }
+      return response.json();
+    })
     .then((data) => {
+      if (!data) return;
       if (data.status === "success") {
         // Refresh the list to show the new student
         loadStudentsAndInitialize();
@@ -253,9 +273,18 @@ function handleTableClick(event) {
     if (confirm("Are you sure you want to delete this student?")) {
       fetch(`api/index.php?student_id=${studentId}`, {
         method: "DELETE",
+        credentials: "same-origin",
       })
-        .then((response) => response.json())
+        .then((response) => {
+          if (response.status === 401 || response.status === 403) {
+            alert("Authentication required. Please log in.");
+            window.location.href = "/src/auth/login.html";
+            return null;
+          }
+          return response.json();
+        })
         .then((data) => {
+          if (!data) return;
           if (data.status === "success") {
             // Refresh the list
             loadStudentsAndInitialize();
@@ -297,14 +326,23 @@ editStudentForm.addEventListener("submit", function (e) {
   fetch("api/index.php", {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
+    credentials: "same-origin",
     body: JSON.stringify({
       student_id: studentId,
       name: updatedName,
       email: updatedEmail,
     }),
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (response.status === 401 || response.status === 403) {
+        alert("Authentication required. Please log in.");
+        window.location.href = "/src/auth/login.html";
+        return null;
+      }
+      return response.json();
+    })
     .then((data) => {
+      if (!data) return;
       if (data.status === "success") {
         // Hide modal
         let modal = bootstrap.Modal.getInstance(editStudentModal);
@@ -392,6 +430,20 @@ function handleSort(event) {
   const currentSortDir = th.getAttribute("data-sort-dir") || "asc";
   const newSortDir = currentSortDir === "asc" ? "desc" : "asc";
 
+  // Remove sort indicators from all headers
+  tableHeaders.forEach((header) => {
+    if (header.cellIndex !== 3) {
+      // Skip Actions column
+      const text = header.textContent.replace(/ ▲| ▼/g, "").trim();
+      header.textContent = text;
+      header.style.cursor = "pointer";
+    }
+  });
+
+  // Add sort indicator to current header
+  const headerText = th.textContent.replace(/ ▲| ▼/g, "").trim();
+  th.textContent = headerText + (newSortDir === "asc" ? " ▲" : " ▼");
+
   // Update UI state
   th.setAttribute("data-sort-dir", newSortDir);
 
@@ -424,7 +476,19 @@ function handleSort(event) {
 async function loadStudentsAndInitialize() {
   // ... your implementation here ...
   try {
-    const response = await fetch("api/index.php");
+    const response = await fetch("api/index.php", {
+      credentials: "same-origin",
+    });
+
+    // Check for authentication errors
+    if (response.status === 401 || response.status === 403) {
+      alert(
+        "Admin access required. Please log in with an admin account to access student management."
+      );
+      window.location.href = "/src/auth/login.html";
+      return;
+    }
+
     if (!response.ok) {
       console.error("Failed to fetch students from API");
       return;

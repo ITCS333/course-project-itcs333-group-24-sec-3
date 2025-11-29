@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../common/db.php';
+require_once __DIR__ . '/../../common/auth.php';
 /**
  * Authentication Handler for Login Form
  * 
@@ -157,6 +158,12 @@ try {
         // TODO: Store user information in session variables
         // Store: user_id, user_name, user_email, logged_in
         // DO NOT store the password in the session!
+        $_SESSION['user'] = [
+            'id' => (int)$user['id'],
+            'name' => $user['name'],
+            'email' => $user['email'],
+            'is_admin' => (int)$user['is_admin']
+        ];
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_name'] = $user['name'];
         $_SESSION['user_email'] = $user['email'];

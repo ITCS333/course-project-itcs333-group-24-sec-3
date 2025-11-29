@@ -10,6 +10,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 require_once __DIR__ . '/../../common/db.php';
+require_once __DIR__ . '/../../common/auth.php';
+
+// Protect all resource routes - require authentication
+requireApiAuthentication();
 
 $db = getDatabaseConnection();
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
@@ -45,10 +49,14 @@ try {
                 break;
             }
 
+            // Creating resources requires admin
+            requireApiAdmin();
             createResource($db, $requestData);
             break;
 
         case 'PUT':
+            // Updating resources requires admin
+            requireApiAdmin();
             updateResource($db, $requestData);
             break;
 
@@ -59,6 +67,8 @@ try {
                 break;
             }
 
+            // Deleting resources requires admin
+            requireApiAdmin();
             $targetResourceId = $_GET['id'] ?? ($requestData['id'] ?? null);
             deleteResource($db, $targetResourceId);
             break;

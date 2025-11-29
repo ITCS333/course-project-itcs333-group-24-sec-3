@@ -1,88 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manage Weekly Breakdown</title>
-<style>
-       body {
-           font-family: Arial, sans-serif;
-           margin: 20px;
-       }
-       header h1 {
-           margin-bottom: 20px;
-       }
-       form, table {
-           width: 100%;
-           margin-top: 20px;
-           border-collapse: collapse;
-       }
-       fieldset {
-           padding: 15px;
-       }
-       label {
-           display: block;
-           margin-top: 10px;
-           margin-bottom: 3px;
-       }
-       input, textarea {
-           width: 100%;
-           padding: 7px;
-       }
-       table, th, td {
-           border: 1px solid #ddd;
-       }
-       th, td {
-           padding: 10px;
-           text-align: left;
-       }
-       button {
-           padding: 7px 12px;
-           margin-right: 5px;
-       }
-</style>
-</head>
-<body>
-<header>
-<h1>Manage Weekly Breakdown</h1>
-</header>
-<main>
-<!-- Section 1: Add Week -->
-<section>
-<h2>Add a New Week</h2>
-<form id="week-form" action="#">
-<fieldset>
-<legend>Weekly Details</legend>
-<label for="week-title">Week Title</label>
-<input id="week-title" type="text" required placeholder="Week 1: Introduction to HTML">
-<label for="week-start-date">Start Date</label>
-<input id="week-start-date" type="date" required>
-<label for="week-description">Description / Notes</label>
-<textarea id="week-description" rows="5"></textarea>
-<label for="week-links">Exercise / Resource Links</label>
-<textarea id="week-links" rows="3" placeholder="One link per line"></textarea>
-<button id="add-week" type="submit">Add Week</button>
-</fieldset>
-</form>
-</section>
-<!-- Section 2: List of Weeks -->
-<section>
-<h2>Current Weekly Breakdown</h2>
-<table id="weeks-table">
-<thead>
-<tr>
-<th>Week Title</th>
-<th>Description</th>
-<th>Actions</th>
-</tr>
-</thead>
-<tbody id="weeks-tbody">
-<!-- Table rows will be added by JavaScript -->
-</tbody>
-</table>
-</section>
-</main>
-<!-- Linking JavaScript File -->
-<script src="admin.js" defer></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Weekly Breakdown</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      header h1 {
+        margin-bottom: 20px;
+      }
+      form,
+      table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+      }
+      fieldset {
+        padding: 15px;
+      }
+      label {
+        display: block;
+        margin-top: 10px;
+        margin-bottom: 3px;
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 7px;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid #ddd;
+      }
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+      }
+      button {
+        padding: 7px 12px;
+        margin-right: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a
+        href="/index.html"
+        style="
+          text-decoration: none;
+          color: #0d6efd;
+          font-size: 14px;
+          display: inline-block;
+          margin-bottom: 10px;
+        "
+      >
+        ← Back to Home
+      </a>
+      <h1>Manage Weekly Breakdown</h1>
+    </header>
+    <main>
+      <!-- Section 1: Add Week -->
+      <section>
+        <h2>Add a New Week</h2>
+        <form id="week-form" action="#">
+          <fieldset>
+            <legend>Weekly Details</legend>
+            <label for="week-title">Week Title</label>
+            <input
+              id="week-title"
+              type="text"
+              required
+              placeholder="Week 1: Introduction to HTML"
+            />
+            <label for="week-start-date">Start Date</label>
+            <input id="week-start-date" type="date" required />
+            <label for="week-description">Description / Notes</label>
+            <textarea id="week-description" rows="5"></textarea>
+            <label for="week-links">Exercise / Resource Links</label>
+            <textarea
+              id="week-links"
+              rows="3"
+              placeholder="One link per line"
+            ></textarea>
+            <button id="add-week" type="submit">Add Week</button>
+          </fieldset>
+        </form>
+      </section>
+      <!-- Section 2: List of Weeks -->
+      <section>
+        <h2>Current Weekly Breakdown</h2>
+        <table id="weeks-table">
+          <thead>
+            <tr>
+              <th>Week Title</th>
+              <th>Description</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="weeks-tbody">
+            <!-- Table rows will be added by JavaScript -->
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <!-- Linking JavaScript File -->
+    <script src="admin.js" defer></script>
+  </body>
 </html>

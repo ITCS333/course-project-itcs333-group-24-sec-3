@@ -60,10 +60,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // ============================================================================
 
 // TODO: Include the database connection class
-require_once "Database.php";
+require_once __DIR__ . '/../../common/db.php';
 
 // TODO: Create database connection
-$db = (new Database())->connect();
+$db = (new db())->connect();
 
 // TODO: Set PDO to throw exceptions on errors
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

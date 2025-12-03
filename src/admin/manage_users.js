@@ -121,9 +121,15 @@ function handleChangePassword(event) {
   // ... your implementation here ...
   event.preventDefault();
 
+  const selectedUserId = document.getElementById("select-user").value;
   const currentPassword = document.getElementById("current-password").value;
   const newPassword = document.getElementById("new-password").value;
   const confirmPassword = document.getElementById("confirm-password").value;
+
+  if (!selectedUserId) {
+    alert("Please select a user.");
+    return;
+  }
 
   if (newPassword !== confirmPassword) {
     alert("Passwords do not match.");
@@ -134,14 +140,6 @@ function handleChangePassword(event) {
     return;
   }
 
-  // Get logged-in user from localStorage
-  const userData = localStorage.getItem("user");
-  if (!userData) {
-    alert("You must be logged in to change password.");
-    return;
-  }
-  const user = JSON.parse(userData);
-
   // Send request to API
   fetch("api/index.php", {
     method: "POST",
@@ -151,25 +149,52 @@ function handleChangePassword(event) {
     credentials: "same-origin",
     body: JSON.stringify({
       action: "change_password",
-      student_id: user.id,
+      student_id: selectedUserId,
       current_password: currentPassword,
       new_password: newPassword,
     }),
   })
     .then((response) => {
-      if (response.status === 401 || response.status === 403) {
-        alert(
-          "Your session has expired or you do not have permission. Please log in again."
-        );
-        window.location.href = "/src/auth/login.html";
-        return null;
-      }
-      return response.json();
+      return response
+        .json()
+        .then((data) => ({ status: response.status, ok: response.ok, data }));
     })
-    .then((data) => {
-      if (!data) return;
-      if (data.status === "success") {
-        alert("Password updated successfully!");
+    .then(({ status, ok, data }) => {
+      if (!ok) {
+        // Check if this is an auth error (from requireApiAdmin) vs business logic error
+        // Auth errors have 'success' key, business errors have 'status' key
+        if (status === 401 && data.error === "UNAUTHORIZED") {
+          // Session expired or not logged in
+          alert(
+            data.message || "Your session has expired. Please log in again."
+          );
+          window.location.href = "/src/auth/login.html";
+          return;
+        }
+
+        if (status === 403 && data.error === "FORBIDDEN") {
+          // Not admin
+          alert(data.message || "Admin privileges required.");
+          window.location.href = "/src/auth/login.html";
+          return;
+        }
+
+        // For password change business logic errors (wrong password = 401 with 'status' key)
+        if (status === 401 && data.status === "error") {
+          // This is a password verification error, not an auth error
+          alert(data.message);
+          return;
+        }
+
+        // Handle other errors (400, 404, 500, etc.)
+        alert(data.message || "Error updating password");
+        return;
+      }
+
+      // Success case - check both 'status' and 'success' keys for compatibility
+      if (data.status === "success" || data.success === true) {
+        alert(data.message || "Password updated successfully!");
+        document.getElementById("select-user").value = "";
         document.getElementById("current-password").value = "";
         document.getElementById("new-password").value = "";
         document.getElementById("confirm-password").value = "";
@@ -181,6 +206,21 @@ function handleChangePassword(event) {
       console.error("Error:", error);
       alert("An error occurred while updating the password.");
     });
+}
+
+/**
+ * Populate the user dropdown for password change
+ */
+function populateUserDropdown() {
+  const selectUser = document.getElementById("select-user");
+  selectUser.innerHTML = '<option value="">-- Select a student --</option>';
+
+  students.forEach((student) => {
+    const option = document.createElement("option");
+    option.value = student.id || student.student_id;
+    option.textContent = `${student.name} (${student.email})`;
+    selectUser.appendChild(option);
+  });
 }
 
 /**
@@ -227,15 +267,24 @@ function handleAddStudent(event) {
     body: JSON.stringify(newStudent),
   })
     .then((response) => {
-      if (response.status === 401 || response.status === 403) {
-        alert("Authentication required. Please log in.");
-        window.location.href = "/src/auth/login.html";
-        return null;
-      }
-      return response.json();
+      return response
+        .json()
+        .then((data) => ({ status: response.status, ok: response.ok, data }));
     })
-    .then((data) => {
-      if (!data) return;
+    .then(({ status, ok, data }) => {
+      if (!ok) {
+        // Handle authentication/authorization errors
+        if (status === 401 || status === 403) {
+          alert(data.message || "Authentication required. Please log in.");
+          window.location.href = "/src/auth/login.html";
+          return;
+        }
+        // Handle other errors
+        alert(data.message || "Error adding student");
+        return;
+      }
+
+      // Success case
       if (data.status === "success") {
         // Refresh the list to show the new student
         loadStudentsAndInitialize();
@@ -276,15 +325,28 @@ function handleTableClick(event) {
         credentials: "same-origin",
       })
         .then((response) => {
-          if (response.status === 401 || response.status === 403) {
-            alert("Authentication required. Please log in.");
-            window.location.href = "/src/auth/login.html";
-            return null;
-          }
-          return response.json();
+          return response
+            .json()
+            .then((data) => ({
+              status: response.status,
+              ok: response.ok,
+              data,
+            }));
         })
-        .then((data) => {
-          if (!data) return;
+        .then(({ status, ok, data }) => {
+          if (!ok) {
+            // Handle authentication/authorization errors
+            if (status === 401 || status === 403) {
+              alert(data.message || "Authentication required. Please log in.");
+              window.location.href = "/src/auth/login.html";
+              return;
+            }
+            // Handle other errors
+            alert(data.message || "Error deleting student");
+            return;
+          }
+
+          // Success case
           if (data.status === "success") {
             // Refresh the list
             loadStudentsAndInitialize();
@@ -334,15 +396,28 @@ editStudentForm.addEventListener("submit", function (e) {
     }),
   })
     .then((response) => {
-      if (response.status === 401 || response.status === 403) {
-        alert("Authentication required. Please log in.");
-        window.location.href = "/src/auth/login.html";
-        return null;
-      }
-      return response.json();
+      return response
+        .json()
+        .then((data) => ({ status: response.status, ok: response.ok, data }));
     })
-    .then((data) => {
-      if (!data) return;
+    .then(({ status, ok, data }) => {
+      if (!ok) {
+        // Handle authentication/authorization errors
+        if (status === 401 || status === 403) {
+          alert(data.message || "Authentication required. Please log in.");
+          window.location.href = "/src/auth/login.html";
+          return;
+        }
+        // Handle other errors
+        Swal.fire({
+          icon: "error",
+          title: "Error updating student",
+          text: data.message || "Unknown error",
+        });
+        return;
+      }
+
+      // Success case
       if (data.status === "success") {
         // Hide modal
         let modal = bootstrap.Modal.getInstance(editStudentModal);
@@ -496,14 +571,43 @@ async function loadStudentsAndInitialize() {
     const jsonResponse = await response.json();
     students = jsonResponse.data || [];
     renderTable(students);
+    populateUserDropdown();
 
     changePasswordForm.addEventListener("submit", handleChangePassword);
     addStudentForm.addEventListener("submit", handleAddStudent);
     tableBody.addEventListener("click", handleTableClick);
     searchInput.addEventListener("input", handleSearch);
     tableHeaders.forEach((th) => th.addEventListener("click", handleSort));
+
+    // Setup password visibility toggle buttons
+    setupPasswordToggle("toggle-current-password", "current-password");
+    setupPasswordToggle("toggle-new-password", "new-password");
+    setupPasswordToggle("toggle-confirm-password", "confirm-password");
   } catch (error) {
     console.error("An error occurred:", error);
+  }
+}
+
+/**
+ * Setup password visibility toggle
+ */
+function setupPasswordToggle(buttonId, inputId) {
+  const toggleButton = document.getElementById(buttonId);
+  const passwordInput = document.getElementById(inputId);
+
+  if (toggleButton && passwordInput) {
+    toggleButton.addEventListener("click", function () {
+      const icon = this.querySelector("i");
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        icon.classList.remove("bi-eye-slash");
+        icon.classList.add("bi-eye");
+      } else {
+        passwordInput.type = "password";
+        icon.classList.remove("bi-eye");
+        icon.classList.add("bi-eye-slash");
+      }
+    });
   }
 }
 

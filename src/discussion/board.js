@@ -17,8 +17,10 @@ let topics = [];
 
 // --- Element Selections ---
 // TODO: Select the new topic form ('#new-topic-form').
+const newTopicForm = document.querySelector('#new-topic-form');
 
 // TODO: Select the topic list container ('#topic-list-container').
+const topicListContainer = document.querySelector('#topic-list-container');
 
 // --- Functions ---
 
@@ -32,7 +34,35 @@ let topics = [];
  * - The "Delete" button should have a class "delete-btn" and `data-id="${id}"`.
  */
 function createTopicArticle(topic) {
-  // ... your implementation here ...
+  // Create article element
+  const article = document.createElement('article');
+  
+  // Create h3 with link
+  const h3 = document.createElement('h3');
+  const link = document.createElement('a');
+  link.href = `topic.html?id=${topic.id}`;
+  link.textContent = topic.subject;
+  h3.appendChild(link);
+  article.appendChild(h3);
+  
+  // Create footer with metadata
+  const footer = document.createElement('footer');
+  footer.textContent = `Posted by: ${topic.author} on ${topic.date}`;
+  article.appendChild(footer);
+  
+  // Create actions container with Edit and Delete buttons
+  const actionsDiv = document.createElement('div');
+  const editButton = document.createElement('button');
+  editButton.textContent = 'Edit';
+  const deleteButton = document.createElement('button');
+  deleteButton.textContent = 'Delete';
+  deleteButton.className = 'delete-btn';
+  deleteButton.setAttribute('data-id', topic.id);
+  actionsDiv.appendChild(editButton);
+  actionsDiv.appendChild(deleteButton);
+  article.appendChild(actionsDiv);
+  
+  return article;
 }
 
 /**
@@ -44,7 +74,14 @@ function createTopicArticle(topic) {
  * append the resulting <article> to `topicListContainer`.
  */
 function renderTopics() {
-  // ... your implementation here ...
+  // Clear the container
+  topicListContainer.innerHTML = '';
+  
+  // Loop through topics and append each article
+  topics.forEach(topic => {
+    const article = createTopicArticle(topic);
+    topicListContainer.appendChild(article);
+  });
 }
 
 /**
@@ -66,7 +103,37 @@ function renderTopics() {
  * 6. Reset the form.
  */
 function handleCreateTopic(event) {
-  // ... your implementation here ...
+  // Prevent default form submission
+  event.preventDefault();
+  
+  // Get form values
+  const subjectInput = document.querySelector('#topic-subject');
+  const messageInput = document.querySelector('#topic-message');
+  const subject = subjectInput.value.trim();
+  const message = messageInput.value.trim();
+  
+  // Validate inputs
+  if (!subject || !message) {
+    return;
+  }
+  
+  // Create new topic object
+  const newTopic = {
+    id: `topic_${Date.now()}`,
+    subject: subject,
+    message: message,
+    author: 'Student',
+    date: new Date().toISOString().split('T')[0]
+  };
+  
+  // Add to topics array
+  topics.push(newTopic);
+  
+  // Refresh the list
+  renderTopics();
+  
+  // Reset the form
+  newTopicForm.reset();
 }
 
 /**
@@ -80,7 +147,17 @@ function handleCreateTopic(event) {
  * 4. Call `renderTopics()` to refresh the list.
  */
 function handleTopicListClick(event) {
-  // ... your implementation here ...
+  // Check if clicked element is a delete button
+  if (event.target.classList.contains('delete-btn')) {
+    // Get the topic id from data attribute
+    const topicId = event.target.getAttribute('data-id');
+    
+    // Filter out the topic with matching id
+    topics = topics.filter(topic => topic.id !== topicId);
+    
+    // Refresh the list
+    renderTopics();
+  }
 }
 
 /**
@@ -94,7 +171,29 @@ function handleTopicListClick(event) {
  * 5. Add the 'click' event listener to `topicListContainer` (calls `handleTopicListClick`).
  */
 async function loadAndInitialize() {
-  // ... your implementation here ...
+  try {
+    // Fetch topics from JSON file
+    const response = await fetch('api/topics.json');
+    
+    // Check if response is ok
+    if (!response.ok) {
+      throw new Error('Failed to load topics');
+    }
+    
+    // Parse JSON and store in global array
+    topics = await response.json();
+    
+    // Render topics for the first time
+    renderTopics();
+    
+    // Add event listeners
+    newTopicForm.addEventListener('submit', handleCreateTopic);
+    topicListContainer.addEventListener('click', handleTopicListClick);
+  } catch (error) {
+    console.error('Error loading topics:', error);
+    // Display error message in the container
+    topicListContainer.innerHTML = '<p>Error loading topics. Please try again later.</p>';
+  }
 }
 
 // --- Initial Page Load ---

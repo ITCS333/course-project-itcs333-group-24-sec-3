@@ -7,84 +7,299 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- TODO: Add the 'meta' tag for character encoding (UTF-8). -->
-
-    <!-- TODO: Add the responsive 'viewport' meta tag. -->
-
-    <!-- TODO: Add a title, e.g., "Discussion Board". -->
-
-    <!-- TODO: Link to your CSS framework or stylesheet. -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Board</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+      body {
+        background-color: #ffffff;
+        min-height: 100vh;
+      }
+      
+      .header-section {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      }
+      
+      .header-section h1 {
+        margin: 0;
+        font-weight: 600;
+      }
+      
+      .back-link {
+        color: rgba(255,255,255,0.9);
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: color 0.2s;
+      }
+      
+      .back-link:hover {
+        color: white;
+      }
+      
+      .section-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid #e9ecef;
+      }
+      
+      .section-title {
+        color: #0d6efd;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid #e9ecef;
+      }
+      
+      .form-label {
+        font-weight: 500;
+        color: #495057;
+        margin-bottom: 0.5rem;
+      }
+      
+      .form-control, .form-select {
+        border-radius: 6px;
+        border: 1px solid #ced4da;
+        padding: 0.75rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      
+      .form-control:focus, .form-select:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+      }
+      
+      .btn-primary {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        border-radius: 6px;
+        padding: 0.75rem 2rem;
+        font-weight: 500;
+        transition: all 0.2s;
+      }
+      
+      .btn-primary:hover {
+        background-color: #0a58ca;
+        border-color: #0a58ca;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
+      }
+      
+      .topic-card {
+        background: white;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.25rem;
+        transition: all 0.2s;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      }
+      
+      .topic-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+        border-color: #0d6efd;
+      }
+      
+      .topic-title {
+        margin-bottom: 1rem;
+      }
+      
+      .topic-title a {
+        color: #0d6efd;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.25rem;
+        transition: color 0.2s;
+      }
+      
+      .topic-title a:hover {
+        color: #0a58ca;
+        text-decoration: underline;
+      }
+      
+      .topic-footer {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid #e9ecef;
+      }
+      
+      .topic-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+      
+      .btn-sm {
+        border-radius: 5px;
+        padding: 0.4rem 1rem;
+        font-size: 0.875rem;
+      }
+      
+      .btn-outline-primary {
+        color: #0d6efd;
+        border-color: #0d6efd;
+      }
+      
+      .btn-outline-primary:hover {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: white;
+      }
+      
+      .btn-outline-danger {
+        color: #dc3545;
+        border-color: #dc3545;
+      }
+      
+      .btn-outline-danger:hover {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: white;
+      }
+      
+      .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #6c757d;
+      }
+      
+      .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #dee2e6;
+      }
+    </style>
   </head>
   <body>
-    <!-- TODO: Create a 'header' with a main heading ('h1') "General Discussion Board". -->
-    <header>
-      <a
-        href="/index.html"
-        style="
-          text-decoration: none;
-          color: #0d6efd;
-          font-size: 14px;
-          display: inline-block;
-          margin-bottom: 10px;
-        "
-      >
-        ← Back to Home
-      </a>
-      <h1>General Discussion Board</h1>
+    <!-- Header -->
+    <header class="header-section">
+      <div class="container">
+        <a href="/index.html" class="back-link d-inline-block mb-2">
+          <i class="bi bi-arrow-left"></i> Back to Home
+        </a>
+        <h1>General Discussion Board</h1>
+      </div>
     </header>
 
-    <!-- TODO: Create the 'main' content area. -->
+    <!-- Main Content -->
+    <main class="container mb-5">
+      <!-- Section 1: Create a New Topic -->
+      <section class="section-card">
+        <h2 class="section-title">
+          <i class="bi bi-plus-circle me-2"></i>Start a New Topic
+        </h2>
 
-    <!-- Section 1: Create a New Topic -->
-    <!-- TODO: Create a 'section' for the "new topic" form. -->
-    <!-- TODO: Add a sub-heading ('h2') "Start a New Topic". -->
+        <form id="new-topic-form" action="#">
+          <div class="mb-3">
+            <label for="topic-subject" class="form-label">Subject</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="topic-subject" 
+              placeholder="Enter topic subject"
+              required
+            >
+          </div>
 
-    <!-- TODO: Create a 'form' with an id "new-topic-form". Action can be '#'. -->
-    <!-- TODO: Use a 'fieldset' to group the form controls. -->
-    <!-- TODO: Add a 'legend', e.g., "New Topic Details". -->
+          <div class="mb-3">
+            <label for="topic-message" class="form-label">Message</label>
+            <textarea 
+              class="form-control" 
+              id="topic-message" 
+              rows="6" 
+              placeholder="Enter your message here..."
+              required
+            ></textarea>
+          </div>
 
-    <!-- TODO: Add a 'label' and 'input' for the topic subject.
-                         - label 'for': "topic-subject"
-                         - input 'id': "topic-subject", type="text", required -->
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-2"></i>Create Topic
+          </button>
+        </form>
+      </section>
 
-    <!-- TODO: Add a 'label' and 'textarea' for the main message.
-                         - label 'for': "topic-message"
-                         - textarea 'id': "topic-message", rows="6", required -->
+      <!-- Section 2: Existing Topics -->
+      <section class="section-card">
+        <h2 class="section-title">
+          <i class="bi bi-chat-dots me-2"></i>All Topics
+        </h2>
 
-    <!-- TODO: Add a 'button' to submit the form.
-                         - id="create-topic", type="submit", Text: "Create Topic" -->
-    <!-- End of fieldset. -->
-    <!-- End of form. -->
-    <!-- End of form section. -->
+        <div id="topic-list-container">
+          <!-- Topics will be dynamically loaded here -->
+          
+          <!-- Example Topic 1 -->
+          <article class="topic-card">
+            <h3 class="topic-title">
+              <a href="topic.html?id=topic_1">Question about CSS Flexbox</a>
+            </h3>
+            <footer class="topic-footer">
+              <i class="bi bi-person me-1"></i>Posted by: Rashid on 2025-10-25
+            </footer>
+            <div class="topic-actions">
+              <button class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-pencil me-1"></i>Edit
+              </button>
+              <button class="btn btn-outline-danger btn-sm delete-btn" data-id="topic_1">
+                <i class="bi bi-trash me-1"></i>Delete
+              </button>
+            </div>
+          </article>
 
-    <!-- Section 2: Existing Topics -->
-    <!-- TODO: Create a 'section' to display the list of current topics. -->
-    <!-- TODO: Add a sub-heading ('h2') "All Topics". -->
+          <!-- Example Topic 2 -->
+          <article class="topic-card">
+            <h3 class="topic-title">
+              <a href="topic.html?id=topic_2">JavaScript `fetch` API error handling</a>
+            </h3>
+            <footer class="topic-footer">
+              <i class="bi bi-person me-1"></i>Posted by: Khalifa on 2025-10-26
+            </footer>
+            <div class="topic-actions">
+              <button class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-pencil me-1"></i>Edit
+              </button>
+              <button class="btn btn-outline-danger btn-sm delete-btn" data-id="topic_2">
+                <i class="bi bi-trash me-1"></i>Delete
+              </button>
+            </div>
+          </article>
 
-    <!-- TODO: Add a container (like a 'div') to hold the list of topics. -->
-    <!-- TODO: Add 2-3 dummy topics using the structure below. -->
+          <!-- Example Topic 3 -->
+          <article class="topic-card">
+            <h3 class="topic-title">
+              <a href="topic.html?id=topic_3">Best practices for responsive design</a>
+            </h3>
+            <footer class="topic-footer">
+              <i class="bi bi-person me-1"></i>Posted by: Student Name on 2025-10-27
+            </footer>
+            <div class="topic-actions">
+              <button class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-pencil me-1"></i>Edit
+              </button>
+              <button class="btn btn-outline-danger btn-sm delete-btn" data-id="topic_3">
+                <i class="bi bi-trash me-1"></i>Delete
+              </button>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
 
-    <!-- Example Topic 1: -->
-    <!-- TODO: Use an 'article' for each topic. -->
-    <!-- TODO: Add a heading ('h3') containing an anchor tag ('a') linking to the detail page.
-                         - The link's 'href' can be "topic-detail.html" for now.
-                         - The link text should be a dummy topic title, e.g., "Question about CSS Flexbox". -->
-
-    <!-- TODO: Use a 'footer' element for metadata. -->
-    <!-- TODO: Add text like "Posted by: Student Name on YYYY-MM-DD". -->
-    <!-- End of footer. -->
-
-    <!-- TODO: Add a container (e.g., a 'div') for action buttons. -->
-    <!-- TODO: Add an "Edit" button/link. -->
-    <!-- TODO: Add a "Delete" button/link. -->
-    <!-- NOTE: For the exercise, you can add these for all topics. In a real app,
-                             these buttons would only be visible to the topic's author or the admin. -->
-    <!-- End of actions container. -->
-    <!-- End of article. -->
-
-    <!-- End of topics container. -->
-    <!-- End of list section. -->
-
-    <!-- End of main. -->
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="board.js" defer></script>
   </body>
 </html>

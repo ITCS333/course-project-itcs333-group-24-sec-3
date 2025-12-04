@@ -82,15 +82,17 @@ function handleAddAssignment(event) {
   // ... your implementation here ...
   event.preventDefault();
 
-  const title = assignmentForm.title.value.trim();
-  const description = assignmentForm.description.value.trim();
-  const dueDate = assignmentForm.dueDate.value;
+  const title = document.querySelector("#assignment-title").value.trim();
+  const description = document.querySelector("#assignment-description").value.trim();
+  const dueDate = document.querySelector("#assignment-due-date").value;
+  const files = document.querySelector("#assignment-files").value.trim().split("\n");
 
   const newAssignment = {
     id: `asg_${Date.now()}`,
     title,
     description,
     dueDate,
+    files
   };
 
   assignments.push(newAssignment);

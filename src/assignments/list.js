@@ -28,14 +28,27 @@ function createAssignmentArticle(assignment) {
   const { id, title, dueDate, description } = assignment;
 
   const article = document.createElement("article");
-  article.classList.add("assignment-item");
+  article.classList.add("card", "p-4", "mb-3");
 
-  article.innerHTML = `
-    <h2>${title}</h2>
-    <p><strong>Due:</strong> ${dueDate}</p>
-    <p>${description}</p>
-    <a href="details.html?id=${id}" class="details-link">View Details</a>
-  `;
+  // Create elements to safely insert text content
+  const h2 = document.createElement("h2");
+  h2.textContent = title;
+
+  const duePara = document.createElement("p");
+  duePara.innerHTML = `<strong>Due:</strong> ${dueDate}`;
+
+  const descPara = document.createElement("p");
+  descPara.textContent = description; // Use textContent to prevent HTML injection
+
+  const link = document.createElement("a");
+  link.href = `details.html?id=${id}`;
+  link.className = "btn btn-primary btn-sm";
+  link.textContent = "View Details & Discussion";
+
+  article.appendChild(h2);
+  article.appendChild(duePara);
+  article.appendChild(descPara);
+  article.appendChild(link);
 
   return article;
 }
@@ -53,13 +66,13 @@ function createAssignmentArticle(assignment) {
  */
 async function loadAssignments() {
   // ... your implementation here ...
-   try {
+  try {
     const response = await fetch("assignments.json");
     const assignments = await response.json();
 
     listSection.innerHTML = "";
 
-     assignments.forEach(assignment => {
+    assignments.forEach((assignment) => {
       const article = createAssignmentArticle(assignment);
       listSection.appendChild(article);
     });
@@ -67,10 +80,6 @@ async function loadAssignments() {
     console.error("Error loading assignments:", error);
     listSection.innerHTML = "<p>Failed to load assignments.</p>";
   }
-
-
-
-
 }
 
 // --- Initial Page Load ---

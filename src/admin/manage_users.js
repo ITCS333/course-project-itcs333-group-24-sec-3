@@ -325,13 +325,11 @@ function handleTableClick(event) {
         credentials: "same-origin",
       })
         .then((response) => {
-          return response
-            .json()
-            .then((data) => ({
-              status: response.status,
-              ok: response.ok,
-              data,
-            }));
+          return response.json().then((data) => ({
+            status: response.status,
+            ok: response.ok,
+            data,
+          }));
         })
         .then(({ status, ok, data }) => {
           if (!ok) {
@@ -380,66 +378,68 @@ function handleTableClick(event) {
   }
 }
 
-editStudentForm.addEventListener("submit", function (e) {
-  e.preventDefault();
-  const updatedName = editStudentName.value;
-  const updatedEmail = editStudentEmail.value;
-  const studentId = currentEditStudentId;
-  fetch("api/index.php", {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    credentials: "same-origin",
-    body: JSON.stringify({
-      student_id: studentId,
-      name: updatedName,
-      email: updatedEmail,
-    }),
-  })
-    .then((response) => {
-      return response
-        .json()
-        .then((data) => ({ status: response.status, ok: response.ok, data }));
+if (editStudentForm) {
+  editStudentForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const updatedName = editStudentName.value;
+    const updatedEmail = editStudentEmail.value;
+    const studentId = currentEditStudentId;
+    fetch("api/index.php", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({
+        student_id: studentId,
+        name: updatedName,
+        email: updatedEmail,
+      }),
     })
-    .then(({ status, ok, data }) => {
-      if (!ok) {
-        // Handle authentication/authorization errors
-        if (status === 401 || status === 403) {
-          alert(data.message || "Authentication required. Please log in.");
-          window.location.href = "/src/auth/login.html";
+      .then((response) => {
+        return response
+          .json()
+          .then((data) => ({ status: response.status, ok: response.ok, data }));
+      })
+      .then(({ status, ok, data }) => {
+        if (!ok) {
+          // Handle authentication/authorization errors
+          if (status === 401 || status === 403) {
+            alert(data.message || "Authentication required. Please log in.");
+            window.location.href = "/src/auth/login.html";
+            return;
+          }
+          // Handle other errors
+          Swal.fire({
+            icon: "error",
+            title: "Error updating student",
+            text: data.message || "Unknown error",
+          });
           return;
         }
-        // Handle other errors
-        Swal.fire({
-          icon: "error",
-          title: "Error updating student",
-          text: data.message || "Unknown error",
-        });
-        return;
-      }
 
-      // Success case
-      if (data.status === "success") {
-        // Hide modal
-        let modal = bootstrap.Modal.getInstance(editStudentModal);
-        modal.hide();
-        // Refresh table
-        loadStudentsAndInitialize();
-      } else {
+        // Success case
+        if (data.status === "success") {
+          // Hide modal
+          let modal = bootstrap.Modal.getInstance(editStudentModal);
+          modal.hide();
+          // Refresh table
+          loadStudentsAndInitialize();
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error updating student",
+            text: data.message || "Unknown error",
+          });
+        }
+      })
+      .catch((error) => {
         Swal.fire({
           icon: "error",
-          title: "Error updating student",
-          text: data.message || "Unknown error",
+          title: "Error",
+          text: "An error occurred while updating the student.",
         });
-      }
-    })
-    .catch((error) => {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "An error occurred while updating the student.",
       });
-    });
-});
+  });
+}
 
 /**
  * TODO: Implement the handleSearch function.

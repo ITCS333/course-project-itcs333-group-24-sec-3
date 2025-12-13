@@ -8,6 +8,8 @@
     BASIC SETUP AND CONFIGURATION
    ============================================================ */
 
+session_start();
+
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
@@ -376,7 +378,9 @@ try {
         sendError("Invalid resource. Use 'weeks' or 'comments'", 400);
     }
 
-} catch (Exception $e) {
+} catch (PDOException $e) {
+    // Log error for debugging
+    error_log("Database error: " . $e->getMessage());
     sendError("Server error", 500);
 }
 

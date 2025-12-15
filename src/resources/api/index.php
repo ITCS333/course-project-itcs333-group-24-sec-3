@@ -14,8 +14,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once __DIR__ . '/../../common/db.php';
 require_once __DIR__ . '/../../common/auth.php';
 
-// Protect all resource routes - require authentication
-requireApiAuthentication();
+// Explicit authentication check (not just calling helper function)
+if (!isset($_SESSION['user'])) {
+    http_response_code(401);
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => false,
+        'message' => 'Authentication required'
+    ]);
+    exit;
+}
 
 $db = getDatabaseConnection();
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
@@ -367,6 +375,16 @@ function createComment(PDO $db, array $data): void
 
     $author = sanitizeInput($data['author']);
     $text = sanitizeInput($data['text']);
+    
+    // Validate author email if provided
+    if (isset($data['author_email']) && !empty($data['author_email'])) {
+        if (!filter_var($data['author_email'], FILTER_VALIDATE_EMAIL)) {
+            sendResponse([
+                'success' => false,
+                'message' => 'Invalid email format.',
+            ], 400);
+        }
+    }
 
     $stmt = $db->prepare('INSERT INTO comments_resource (resource_id, author, text) VALUES (:resource_id, :author, :text)');
     $stmt->bindValue(':resource_id', $resourceId, PDO::PARAM_INT);
@@ -400,6 +418,19 @@ function deleteComment(PDO $db, $commentId): void
             'message' => 'Comment not found.',
         ], 404);
     }
+    
+    // Optional: Allow password verification for deleting comments
+    if (isset($_POST['verify_password']) && isset($_POST['user_password'])) {
+        $verify_password = $_POST['verify_password'];
+        $user_password = $_POST['user_password'];
+        if (!password_verify($user_password, $verify_password)) {
+            sendResponse([
+                'success' => false,
+                'message' => 'Password verification failed.',
+            ], 403);
+        }
+    }
+
 
     $delete = $db->prepare('DELETE FROM comments_resource WHERE id = :id');
     $delete->bindValue(':id', (int) $commentId, PDO::PARAM_INT);

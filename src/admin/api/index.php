@@ -52,6 +52,13 @@ require_once __DIR__ . '/../../common/auth.php';
 // Admin API requires admin privileges for all operations
 requireApiAdmin();
 
+// Verify user session is set (required for admin access)
+if (!isset($_SESSION['user']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    http_response_code(403);
+    echo json_encode(['success' => false, 'message' => 'Admin access required']);
+    exit;
+}
+
 // TODO: Get the PDO database connection
 $pdo = getDatabaseConnection();
 

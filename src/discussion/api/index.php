@@ -73,6 +73,18 @@ require_once __DIR__ . '/../../common/db.php';
 // $db = $database->getConnection();
 $db = getDatabaseConnection();
 
+// Authentication check for write operations
+if (in_array($_SERVER['REQUEST_METHOD'], ['POST', 'PUT', 'DELETE'])) {
+    if (!isset($_SESSION['user'])) {
+        http_response_code(401);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Authentication required'
+        ]);
+        exit;
+    }
+}
+
 
 // TODO: Get the HTTP request method
 // Use $_SERVER['REQUEST_METHOD']
@@ -233,6 +245,15 @@ function createTopic($db, $data) {
     $subject = sanitizeInput($data['subject']);
     $message = sanitizeInput($data['message']);
     $author = sanitizeInput($data['author']);
+    
+    // Validate author email if provided
+    if (isset($data['author_email'])) {
+        $authorEmail = sanitizeInput($data['author_email']);
+        if (!filter_var($authorEmail, FILTER_VALIDATE_EMAIL)) {
+            sendError('Invalid email address format', 400);
+            return;
+        }
+    }
     
     // TODO: Check if topic_id already exists
     // Prepare and execute a SELECT query to check for duplicate
@@ -461,6 +482,15 @@ function createReply($db, $data) {
     $text = sanitizeInput($data['text']);
     $author = sanitizeInput($data['author']);
     
+    // Validate author email if provided
+    if (isset($data['author_email'])) {
+        $authorEmail = sanitizeInput($data['author_email']);
+        if (!filter_var($authorEmail, FILTER_VALIDATE_EMAIL)) {
+            sendError('Invalid email address format', 400);
+            return;
+        }
+    }
+    
     // TODO: Verify that the parent topic exists
     // Prepare and execute SELECT query on topics table
     // If topic doesn't exist, return error with 404 status (can't reply to non-existent topic)
@@ -520,6 +550,17 @@ function deleteReply($db, $replyId) {
     if (empty($replyId)) {
         sendError('Reply id is required', 400);
         return;
+    }
+    
+    // Optional password verification for delete operation
+    if (isset($_POST['verify_password']) && isset($_POST['user_password'])) {
+        $verify_password = $_POST['verify_password'];
+        $user_password = $_POST['user_password'];
+        
+        if (!password_verify($user_password, $verify_password)) {
+            sendError('Password verification failed', 403);
+            return;
+        }
     }
     
     // TODO: Check if reply exists

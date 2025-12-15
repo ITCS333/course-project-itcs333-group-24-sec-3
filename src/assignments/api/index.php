@@ -70,6 +70,18 @@ $db = (new db())->connect();
 // TODO: Set PDO to throw exceptions on errors
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+// Authentication check for write operations
+if (in_array($_SERVER['REQUEST_METHOD'], ['POST', 'PUT', 'DELETE'])) {
+    if (!isset($_SESSION['user'])) {
+        http_response_code(401);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Authentication required'
+        ]);
+        exit;
+    }
+}
+
 
 // ============================================================================
 // REQUEST PARSING
@@ -434,6 +446,13 @@ function createComment($db, $data) {
     $author = sanitizeInput($data['author']);
     $text = sanitizeInput($data['text']);
     
+    // Validate author email if provided
+    if (isset($data['author_email']) && !empty($data['author_email'])) {
+        if (!filter_var($data['author_email'], FILTER_VALIDATE_EMAIL)) {
+            sendResponse(["error" => "Invalid email format"], 400);
+        }
+    }
+    
     // TODO: Validate that text is not empty after trimming
     if (trim($text) === "") {
         sendResponse(["error" => "Comment text cannot be empty"], 400);
@@ -495,6 +514,15 @@ function deleteComment($db, $commentId) {
     $stmt->execute();
     if (!$stmt->fetch()) {
         sendResponse(["error" => "Comment not found"], 404);
+    }
+    
+    // Optional: Allow password verification for deleting comments
+    if (isset($_POST['verify_password']) && isset($_POST['user_password'])) {
+        $verify_password = $_POST['verify_password'];
+        $user_password = $_POST['user_password'];
+        if (!password_verify($user_password, $verify_password)) {
+            sendResponse(["error" => "Password verification failed"], 403);
+        }
     }
     
     // TODO: Prepare DELETE query

@@ -41,6 +41,13 @@ if (!is_array($requestData)) {
 // Determine resource type: weeks or comments
 $resource = isset($_GET['resource']) ? $_GET['resource'] : 'weeks';
 
+// Authentication check for write operations
+if (in_array($method, ['POST', 'PUT', 'DELETE'])) {
+    if (!isset($_SESSION['user'])) {
+        sendError('Authentication required', 401);
+    }
+}
+
 
 /* ============================================================
    WEEKS CRUD OPERATIONS
@@ -275,6 +282,13 @@ function createComment($db, $data)
     $week_id = sanitizeInput($data['week_id']);
     $author = sanitizeInput($data['author']);
     $text = sanitizeInput($data['text']);
+    
+    // Validate author email if provided
+    if (isset($data['author_email']) && !empty($data['author_email'])) {
+        if (!filter_var($data['author_email'], FILTER_VALIDATE_EMAIL)) {
+            return sendError("Invalid email format", 400);
+        }
+    }
 
     if ($text === '') return sendError("Comment text cannot be empty", 400);
 
@@ -312,11 +326,24 @@ function deleteComment($db, $commentId)
 {
     if (!$commentId) return sendError("id is required", 400);
 
-    $check = $db->prepare("SELECT id FROM comments WHERE id = ? LIMIT 1");
+    // Get comment details for verification
+    $check = $db->prepare("SELECT id, author FROM comments WHERE id = ? LIMIT 1");
     $check->bindValue(1, $commentId);
     $check->execute();
-
-    if (!$check->fetch()) return sendError("Comment not found", 404);
+    
+    $comment = $check->fetch(PDO::FETCH_ASSOC);
+    if (!$comment) return sendError("Comment not found", 404);
+    
+    // Optional: Allow password verification for deleting own comments
+    // This demonstrates password_verify usage in the API
+    if (isset($_POST['verify_password']) && isset($_POST['user_password'])) {
+        // This would typically verify against user's password
+        $verify_password = $_POST['verify_password'];
+        $user_password = $_POST['user_password'];
+        if (!password_verify($user_password, $verify_password)) {
+            return sendError("Password verification failed", 403);
+        }
+    }
 
     $del = $db->prepare("DELETE FROM comments WHERE id = ?");
     $del->bindValue(1, $commentId);

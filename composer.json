@@ -9,6 +9,7 @@
         "php": ">=8.1"
     },
     "scripts": {
+        "test": "phpunit",
         "test_auth": "phpunit tests/test_login.php.test",
         "test_admin": "phpunit tests/test_admin.php.test",
         "test_resources": "phpunit tests/test_resources.php.test",

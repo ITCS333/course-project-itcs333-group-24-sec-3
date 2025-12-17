@@ -22,3 +22,5 @@
 | MOHAMAD MULHAM AHMAD WAIS            | Task 5 |
 ## A link to your live, hosted application on Replit.
 https://replit.com/@aliaalsadadi/ITCS333-Course-Project
+https://replit.com/@tfroshail/ITCS333-Course-Project-1
+https://replit.com/join/chlwstjgrb-tfroshail
